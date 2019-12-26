@@ -25,6 +25,9 @@ app.post('/usuario', function(req, res) {
             persona: body
         });
     }
+    // res.json({
+    //     persona: body
+    // });
 });
 
 app.put('/usuario/:id', function(req, res) {
@@ -38,6 +41,6 @@ app.delete('/usuario', function(req, res) {
     res.json('Delete Usuario');
 });
 
-app.listen(process.env.PORT, () => {
-    console.log('Escuchando el puerto 3000');
+app.listen(puerto, () => {
+    console.log(`Escuchando el puerto ${puerto}`);
 });
