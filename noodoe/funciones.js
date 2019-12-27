@@ -22,14 +22,14 @@ const updateOwnerInfo = (dat) => {
     if (dat.ownerId && dat.status) {
         return {
             status: 'Ok',
-            type: 'updateOwner',
+            type: 'updateOwnerInfo',
             result: ['success', 'error'],
             message: 'Not implemented'
         }
     } else {
         return {
             status: 'Error',
-            type: 'updateOwner',
+            type: 'updateOwnerInfo',
             error: 'Error code',
             message: 'An error ocurred'
         }
