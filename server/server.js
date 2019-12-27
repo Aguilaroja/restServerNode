@@ -56,6 +56,7 @@ app.post('/', function(req, res) {
             //     });
             // });
     } else {
+        //En caso que el parámetro action venga vacío
         res.json({
             status: 'Error',
             message: 'Malformed Request'

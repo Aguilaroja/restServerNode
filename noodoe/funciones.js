@@ -118,7 +118,7 @@ const getOwnerRecord = (dat) => {
 }
 
 const getBatteryStatus = (dat) => {
-    // if (dat.batteryId) {
+    // if (dat.batteryId) { //Cuando ya se establezca la variable
     if (dat.action) {
         let accion = dat.action;
         request({
