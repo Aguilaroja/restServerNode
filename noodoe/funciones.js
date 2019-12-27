@@ -19,7 +19,7 @@ const createOwner = (dat) => {
 }
 
 const updateOwnerInfo = (dat) => {
-    if (dat.ownerId && dat.status) {
+    if (dat.id && dat.status) {
         return {
             status: 'Ok',
             type: 'updateOwnerInfo',
@@ -37,7 +37,7 @@ const updateOwnerInfo = (dat) => {
 }
 
 const getOwnerInfo = (dat) => {
-    if (dat.ownerId) {
+    if (dat.id) {
         return {
             type: 'getOwnerInfo',
             status: ['active', 'disable'],
@@ -55,7 +55,7 @@ const getOwnerInfo = (dat) => {
 }
 
 const getSwapRecord = (dat) => {
-    if (dat.ownerId && dat.start && dat.end) {
+    if (dat.id && dat.sta && dat.end) {
         return {
             status: 'Ok',
             type: 'getSwapRecord',
@@ -73,7 +73,7 @@ const getSwapRecord = (dat) => {
 }
 
 const getCabinetStatus = (dat) => {
-    if (dat.ownerId) {
+    if (dat.id) {
         return {
             status: ['available', 'unavailable', 'offline'],
             power: ['UPS', 'AC'],
@@ -94,7 +94,7 @@ const getCabinetStatus = (dat) => {
 }
 
 const getOwnerRecord = (dat) => {
-    if (dat.ownerId) {
+    if (dat.id) {
         return {
             status: 'Ok',
             type: 'getOwnerRecord',
