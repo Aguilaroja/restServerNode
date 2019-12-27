@@ -49,7 +49,7 @@ const getOwnerInfo = (dat) => {
             status: 'Error',
             type: 'getOwnerInfo',
             error: 'Error code',
-            message: 'An error ocurred'
+            message: 'No ownerId'
         }
     }
 }
@@ -67,7 +67,7 @@ const getSwapRecord = (dat) => {
             status: 'Error',
             type: 'getSwapRecord',
             error: 'Error code',
-            message: 'An error ocurred'
+            message: 'No ownerId, No start, No end'
         }
     }
 }
@@ -88,7 +88,7 @@ const getCabinetStatus = (dat) => {
             status: 'Error',
             type: 'getCabinetStatus',
             error: 'Error code',
-            message: 'An error ocurred'
+            message: 'No ownerId'
         }
     }
 }
@@ -112,7 +112,7 @@ const getOwnerRecord = (dat) => {
             status: 'Error',
             type: 'getOwnerRecord',
             error: 'Error code',
-            message: 'An error ocurred'
+            message: 'No ownerId'
         }
     }
 }
