@@ -119,30 +119,30 @@ const getOwnerRecord = (dat) => {
 
 const getBatteryStatus = (dat) => {
     // if (dat.batteryId) { //Cuando ya se establezca la variable
-    if (dat.action) {
-        let accion = dat.action;
-        request({
-                method: 'POST',
-                uri: `https://iusa-dev.server.noodoe.com/${accion}`,
-                // qs: { batteryId: query.batteryId }
-            },
-            (err, response, body) => {
-                if (err) {
-                    res.json({ err, status: 'Error' })
-                } else {
-                    res.json({
-                        // accion,
-                        response: JSON.parse(response.body)
-                    })
-                }
-            }
-        )
-    } else {
-        res.json({
+    // if (dat.action) {
+    //     let accion = dat.action;
+    //     request({
+    //             method: 'POST',
+    //             uri: `https://iusa-dev.server.noodoe.com/${accion}`,
+    //             // qs: { batteryId: query.batteryId }
+    //         },
+    //         (err, response, body) => {
+    //             if (err) {
+    //                 res.json({ err, status: 'Error' })
+    //             } else {
+    //                 res.json({
+    //                     // accion,
+    //                     response: JSON.parse(response.body)
+    //                 })
+    //             }
+    //         }
+    //     )
+    // } else {
+    res.json({
             status: 'Error',
             message: 'Malformed Request'
         })
-    }
+        // }
 }
 
 module.exports = {
