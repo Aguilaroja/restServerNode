@@ -13,7 +13,7 @@ const createOwner = (dat) => {
             status: 'Error',
             type: 'createOwner',
             error: 'Error code',
-            message: 'An error ocurred'
+            message: 'No ownerId, No status'
         }
     }
 }
@@ -31,7 +31,7 @@ const updateOwnerInfo = (dat) => {
             status: 'Error',
             type: 'updateOwnerInfo',
             error: 'Error code',
-            message: 'An error ocurred'
+            message: 'No ownerId, No status'
         }
     }
 }
@@ -118,18 +118,20 @@ const getOwnerRecord = (dat) => {
 }
 
 const getBatteryStatus = (dat) => {
-    if (dat.batteryId) {
+    // if (dat.batteryId) {
+    if (dat.action) {
+        let accion = dat.action;
         request({
                 method: 'POST',
-                uri: `${config.noodoeUrl}${endpoint}`,
-                qs: { batteryId: query.batteryId }
+                uri: `https://iusa-dev.server.noodoe.com/${accion}`,
+                // qs: { batteryId: query.batteryId }
             },
             (err, response, body) => {
                 if (err) {
                     res.json({ err, status: 'Error' })
                 } else {
                     res.json({
-                        endpoint,
+                        // accion,
                         response: JSON.parse(response.body)
                     })
                 }
@@ -138,7 +140,6 @@ const getBatteryStatus = (dat) => {
     } else {
         res.json({
             status: 'Error',
-            endpoint,
             message: 'Malformed Request'
         })
     }

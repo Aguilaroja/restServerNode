@@ -1,6 +1,9 @@
 //Requiere de config para saber el puerto por donde entrarás las peticiones
 require('./config/config');
 
+//Para enviar peticiones
+// const request = require('request');
+
 const funciones = require('../noodoe/apiNoodoe');
 
 //Marco de servidor
@@ -22,20 +25,39 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', function(req, res) {
+    // let body = req.body;
+    // if (body.nombre === undefined) {
+    //     res.status(400).json({
+    //         ok: false,
+    //         mensaje: 'El nombre es necesario'
+    //     });
+    // } else {
+    //     res.json({
+    //         persona: body
+    //     });
+    // }
 
     let dato = req.body;
 
     if (dato.action) {
         let opcion = dato.action;
 
+        // let arr = res.json({
+        //     dato
+        // });
+
+        // return arr;
+
         const getInfo = async(opciones, datos) => {
 
             try {
-                const resultado = await funciones.getOpcion(opciones, datos);
+                const resultado = await funciones.getOpcion(opciones, datos); //Así capturo los datos de la función
+                // return res;
                 res.json({
                     resultado
                 });
             } catch (error) {
+                // return `La dirección ${opcion} no es correcta`;
                 res.json({
                     malo: opciones
                 });
@@ -49,7 +71,7 @@ app.post('/', function(req, res) {
             //     // bueno: resp
             //     console.log(res)
             //     // })
-            // )
+            // )arr
             // .catch(e => {
             //     res.json({
             //         e
@@ -58,6 +80,7 @@ app.post('/', function(req, res) {
     } else {
         res.json({
             status: 'Error',
+            opcion,
             message: 'Malformed Request'
         })
     }
