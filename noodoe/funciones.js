@@ -1,4 +1,6 @@
-const request = require('request');
+// const request = require('request');
+const axios = require('axios');
+const https = require('https');
 
 const createOwner = (dat) => {
     if (dat.ownerId && dat.status) {
@@ -117,32 +119,115 @@ const getOwnerRecord = (dat) => {
     }
 }
 
-const getBatteryStatus = (dat) => {
-    // if (dat.batteryId) { //Cuando ya se establezca la variable
-    // if (dat.action) {
-    //     let accion = dat.action;
-    //     request({
-    //             method: 'POST',
-    //             uri: `https://iusa-dev.server.noodoe.com/${accion}`,
-    //             // qs: { batteryId: query.batteryId }
-    //         },
-    //         (err, response, body) => {
-    //             if (err) {
-    //                 res.json({ err, status: 'Error' })
-    //             } else {
-    //                 res.json({
-    //                     // accion,
-    //                     response: JSON.parse(response.body)
-    //                 })
-    //             }
-    //         }
-    //     )
-    // } else {
-    res.json({
+const getBatteryStatus = async(dat) => {
+    // if (dat.id) { //Cuando ya se establezca la variable
+    if (dat.accion) {
+        let acc = dat.accion;
+        let idBattery = dat.id;
+
+        const encodeURL = encodeURI(acc);
+
+        const instance = axios.create({
+            baseURL: `https://iusa-dev.server.noodoe.com/${acc}`,
+            // timeout: 1000,//Sino recibe respuesta, en este tiempo para el proceso
+            headers: {
+                'batteryId': idBattery //,
+                    // 'x-rapidapi-host': 'devru-latitude-longitude-find-v1.p.rapidapi.com'
+            }
+        });
+
+        const resp = await instance.post();
+
+        // if (resp.data.Results.length === 0) {
+        //     throw new Error(`No hay resultados para ${acc}`);
+        // }
+
+        const data = resp.data;
+
+        return {
+            data
+        }
+
+        /**************************************************************************/
+
+        // const getClima = async(accion) => {
+        //     const resp = await axios.post(`https://iusa-dev.server.noodoe.com/${accion}`)
+        //         .then((res) => {
+        //             console.log(res.data)
+        //                 // return res.data
+        //                 // res.json({
+        //             return res.data
+        //                 // })
+        //         })
+        //         .catch(e => { console.log(e) });
+
+        //     // return `La temperatura de ${resp.data.name} es: ${resp.data.main.temp} °C`;
+        //     // let r = JSON.stringify(resp;
+        //     // console.log(resp.data)
+        //     // return resp.data
+        // }
+
+        // getClima(acc)
+        // .then((res) => {
+        //     return res
+        // })
+        // .catch((e) => {
+        //     return e
+        // })
+
+        /**************************************************************************/
+
+        // const req = https.request({
+        //         method: 'POST',
+        //         hostname: 'https://iusa-dev.server.noodoe.com',
+        //         path: `/${accion}`
+        //     },
+        //     (res) => {
+        //         console.log('statusCode:', res.statusCode);
+        //         console.log('headers:', res.headers);
+        //         res.on('data', (d) => {
+        //             return {
+        //                 d,
+        //                 a: 'B'
+        //             }
+        //             // process.stdout.write(d);
+        //         })
+        //     });
+
+        // req.on('error', (e) => {
+        //     return e;
+        //     // console.log(e)
+        // });
+
+        // req.end();
+        // return {
+        //     accion
+        // }
+
+        /**************************************************************************/
+
+        // request({
+        //         method: 'POST',
+        //         hostname: `https://iusa-dev.server.noodoe.com/${accion}`,
+        //         qs: { batteryId: dat.id }
+        //     },
+        //     (err, response, body) => {
+        //         if (err) {
+        //             return { err, status: 'Error' }
+        //         } else {
+        //             return {
+        //                 accion,
+        //                 response: JSON.parse(response.body)
+        //             }
+        //         }
+        //     }
+        // )
+    } else {
+        res.json({
             status: 'Error',
             message: 'Malformed Request'
         })
-        // }
+    }
 }
 
 module.exports = {

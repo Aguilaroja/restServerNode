@@ -1,14 +1,17 @@
 //Requiere de config para saber el puerto por donde entrarás las peticiones
 require('./config/config');
 
-const funciones = require('../noodoe/apiNoodoe');
+// const funciones = require('../noodoe/apiNoodoe');
 
 //Marco de servidor
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 
 //Da formato JSON a las respuestas
 const bodyParser = require('body-parser');
+
+// app.use(require('./routes/usuario')); //Aquí está en el curso
 
 //parse application/x-www-form-urlenconded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,156 +19,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //parse application/json
 app.use(bodyParser.json());
 
-//app.get, app.post, app.put, app.delete: son las formas en que pueden entrar las peticiones
-app.get('/:action/:id', function(req, res) {
-    let accion = req.params.action;
-    let id = req.params.id;
-    let dato = {
-        id
-    };
-
-    if (accion) {
-
-        const getInfo = async(opciones, datos) => {
-
-            try {
-                const resultado = await funciones.getOpcion(opciones, datos);
-                res.json({
-                    resultado
-                });
-            } catch (error) {
-                res.json({
-                    malo: opciones
-                });
-            }
-
-        }
-
-        getInfo(accion, dato)
-
-    } else {
-        //En caso que el parámetro action venga vacío
-        res.json({
-            status: 'Error',
-            message: 'Malformed Request'
-        })
-    }
-});
-
-app.get('/:action/:id/:start/:end', function(req, res) {
-    let accion = req.params.action;
-    let id = req.params.id;
-    let sta = req.params.start;
-    let end = req.params.end;
-    let dato = {
-        id,
-        sta,
-        end
-    };
-
-    if (accion) {
-
-        const getInfo = async(opciones, datos) => {
-
-            try {
-                const resultado = await funciones.getOpcion(opciones, datos);
-                res.json({
-                    resultado
-                });
-            } catch (error) {
-                res.json({
-                    malo: opciones
-                });
-            }
-
-        }
-
-        getInfo(accion, dato)
-
-    } else {
-        //En caso que el parámetro action venga vacío
-        res.json({
-            status: 'Error',
-            message: 'Malformed Request'
-        })
-    }
-});
-
-app.post('/', function(req, res) {
-
-    let dato = req.body;
-
-    if (dato.action) {
-        let opcion = dato.action;
-
-        const getInfo = async(opciones, datos) => {
-
-            try {
-                const resultado = await funciones.getOpcion(opciones, datos);
-                res.json({
-                    resultado
-                });
-            } catch (error) {
-                res.json({
-                    malo: opciones
-                });
-            }
-
-        }
-
-        getInfo(opcion, dato)
-
-    } else {
-        //En caso que el parámetro action venga vacío
-        res.json({
-            status: 'Error',
-            message: 'Malformed Request'
-        })
-    }
-
-});
-
-app.put('/:action/:id/:status', function(req, res) {
-    let accion = req.params.action;
-    let id = req.params.id;
-    let status = req.params.status;
-    let dato = {
-        id,
-        status
-    };
-
-    if (accion) {
-
-        const getInfo = async(opciones, datos) => {
-
-            try {
-                const resultado = await funciones.getOpcion(opciones, datos);
-                res.json({
-                    resultado
-                });
-            } catch (error) {
-                res.json({
-                    malo: opciones
-                });
-            }
-
-        }
-
-        getInfo(accion, dato)
-
-    } else {
-        //En caso que el parámetro action venga vacío
-        res.json({
-            status: 'Error',
-            message: 'Malformed Request'
-        })
-    }
-});
-
-app.delete('/', function(req, res) {
-    res.json('Delete Usuario');
-});
+app.use(require('./routes/usuario')); //Aquí lo uso yo
 
 app.listen(puerto, () => {
     console.log(`Escuchando el puerto ${puerto}`);
+});
+
+mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
+    if (err) throw err;
+    console.log('Base de datos online')
 });

@@ -28,7 +28,7 @@ const getOpcion = async(opc, dat) => {
     } catch (error) {
 
         res.json({
-            malo: opc
+            maloF: opc
         });
     }
 
