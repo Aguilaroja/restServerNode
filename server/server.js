@@ -25,7 +25,8 @@ app.listen(puerto, () => {
     console.log(`Escuchando el puerto ${puerto}`);
 });
 
-mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
-    if (err) throw err;
-    console.log('Base de datos online')
-});
+mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
+    (err, res) => {
+        if (err) throw err;
+        console.log('Base de datos online')
+    });

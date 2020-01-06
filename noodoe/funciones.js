@@ -1,9 +1,49 @@
 // const request = require('request');
 const axios = require('axios');
-const https = require('https');
+// const https = require('https');
+const bcrypt = require('bcrypt');
+const Usuario = require('../server/models/usuario'); //Ésto es un objeto para el Schema
 
 const createOwner = (dat) => {
     if (dat.ownerId && dat.status) {
+        // if (dat.action && dat.nombre) {
+        //     let usuario = new Usuario({ //Instancia del Schema Usuario
+        //         nombre: dat.nombre,
+        //         email: dat.email,
+        //         password: bcrypt.hashSync(dat.password, 10), //bcrypt.hashSync sirve para encriptar de una sola vía la contraseña
+        //         role: dat.role
+        //     });
+
+        //     // return usuario
+
+        //     //save() es una palabra reservada de mongoose
+        //     usuario.save((err, usuarioDB) => {
+        //         if (err) {
+        //             // return res.status(400).json({
+        //             //     ok: false,
+        //             //     err
+        //             // })
+        //             return {
+        //                 status: 400,
+        //                 ok: false
+        //                     // err
+        //             }
+        //         }
+
+        //         // usuarioDB.password = null;//Serviría para evitar mostrar el valor de la contraseña al momento de mostrar el resultado del insert
+
+        //         // res.json({
+        //         //     ok: true,
+        //         //     usuario: usuarioDB
+        //         // });
+        //         return {
+        //             ok: true
+        //                 // usuario: usuarioDB
+        //         }
+        //     });
+
+        /******************************************************************/
+
         return {
             status: 'Ok',
             type: 'createOwner',
@@ -39,7 +79,7 @@ const updateOwnerInfo = (dat) => {
 }
 
 const getOwnerInfo = (dat) => {
-    if (dat.id) {
+    if (dat.dato.id) {
         return {
             type: 'getOwnerInfo',
             status: ['active', 'disable'],
@@ -57,7 +97,7 @@ const getOwnerInfo = (dat) => {
 }
 
 const getSwapRecord = (dat) => {
-    if (dat.id && dat.sta && dat.end) {
+    if (dat.dato.id && dat.dato.start && dat.dato.end) {
         return {
             status: 'Ok',
             type: 'getSwapRecord',
@@ -75,7 +115,7 @@ const getSwapRecord = (dat) => {
 }
 
 const getCabinetStatus = (dat) => {
-    if (dat.id) {
+    if (dat.dato.id) {
         return {
             status: ['available', 'unavailable', 'offline'],
             power: ['UPS', 'AC'],
@@ -96,7 +136,7 @@ const getCabinetStatus = (dat) => {
 }
 
 const getOwnerRecord = (dat) => {
-    if (dat.id) {
+    if (dat.dato.id) {
         return {
             status: 'Ok',
             type: 'getOwnerRecord',
@@ -120,10 +160,10 @@ const getOwnerRecord = (dat) => {
 }
 
 const getBatteryStatus = async(dat) => {
-    // if (dat.id) { //Cuando ya se establezca la variable
-    if (dat.accion) {
+    if (dat.dato) { //Cuando ya se establezca la variable
+        // if (dat.accion) {
         let acc = dat.accion;
-        let idBattery = dat.id;
+        let idBattery = dat.dato.id;
 
         const encodeURL = encodeURI(acc);
 
