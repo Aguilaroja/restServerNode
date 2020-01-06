@@ -90,7 +90,7 @@ app.get('/:action', function(req, res) {
             let limite = req.query.limite || 5;
             limite = Number(limite);
 
-            Usuario.find({ "estado": false }, 'nombre email') //El segundo parámetro es para indicarle cuáles datos requiero
+            Usuario.find({}, 'nombre email') //El segundo parámetro es para indicarle cuáles datos requiero
                 .limit(limite)
                 .skip(desde)
                 .exec((err, usuarios) => {
@@ -101,7 +101,7 @@ app.get('/:action', function(req, res) {
                         })
                     }
 
-                    Usuario.countDocuments({ "estado": false }, (err, conteo) => {
+                    Usuario.countDocuments({}, (err, conteo) => {
                         res.json({
                             ok: true,
                             usuarios,
