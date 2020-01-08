@@ -28,10 +28,6 @@ app.post('/login', (req, res) => {
             })
         }
 
-        // return res.json({
-        //     dato
-        // })
-
         //Compara que las contraseñas sean iguales ya encriptadas
         if (!bcrypt.compareSync(dato.password, usuarioDB.password)) {
             return res.status(400).json({
@@ -61,9 +57,6 @@ app.post('/login', (req, res) => {
             token
         });
     });
-    // res.json({
-    //     ok: true
-    // })
 })
 
 

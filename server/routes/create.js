@@ -1,6 +1,5 @@
 //Marco de servidor
 const express = require('express');
-// const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const app = express();
 const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto para el Schema
@@ -10,11 +9,6 @@ const { verificaToken, verificaAdminRole } = require('../middlewares/autenticaci
 app.post('/:create', [verificaToken, verificaAdminRole], (req, res) => {
     let accion = req.params.create;
     let dato = req.body;
-
-    // return res.json({
-    //     dato,
-    //     accion
-    // })
 
     if (accion === 'chargerCenter') {
         let charger_center = new ChargerCenter({ //Instancia del Schema ChargerCenter
@@ -32,8 +26,6 @@ app.post('/:create', [verificaToken, verificaAdminRole], (req, res) => {
             longitude: dato.longitude,
             address: dato.address
         });
-
-        // return charger_center;
 
         // save() es una palabra reservada de mongoose
         charger_center.save((err, chargerCenterDB) => {
@@ -62,8 +54,6 @@ app.post('/:create', [verificaToken, verificaAdminRole], (req, res) => {
             longitude: dato.longitude,
             address: dato.address
         });
-
-        // return charger_center;
 
         // save() es una palabra reservada de mongoose
         service_center.save((err, serviceCenterDB) => {

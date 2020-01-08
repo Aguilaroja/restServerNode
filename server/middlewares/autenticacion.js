@@ -14,9 +14,6 @@ let verificaToken = (req, res, next) => {
         req.user = decoded.user;
         next();
     });
-    // res.json({
-    //     token
-    // })
 }
 
 //Verifica AdminRole
