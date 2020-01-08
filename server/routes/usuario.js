@@ -5,72 +5,78 @@ const _ = require('underscore'); //Paquetería para evitar cambios desde las pet
 const app = express();
 const funciones = require('../../noodoe/apiNoodoe');
 const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
+const { verificaToken, verificaAdminRole } = require('../middlewares/autenticacion');
 
 //app.get, app.post, app.put, app.delete: son las formas en que pueden entrar las peticiones
-app.post('', function(req, res) { //El tipo de request POST, lo puse en primera opción, ya que teniéndolo abajo de los GET no hacía efecto el request
+app.post('', verificaToken, function(req, res) { //El tipo de request POST, lo puse en primera opción, ya que teniéndolo abajo de los GET no hacía efecto el request
 
     let dato = req.body;
 
     /****************************************************************************/
     // Ésta parte debe estar en funciones.js
 
-    let usuario = new Usuario({ //Instancia del Schema Usuario
-        nombre: dato.nombre,
-        email: dato.email,
-        password: bcrypt.hashSync(dato.password, 10), //bcrypt.hashSync sirve para encriptar de una sola vía la contraseña
-        role: dato.role
-    });
+    // let usuario = new Usuario({ //Instancia del Schema Usuario
+    //     nombre: dato.nombre,
+    //     email: dato.email,
+    //     password: bcrypt.hashSync(dato.password, 10), //bcrypt.hashSync sirve para encriptar de una sola vía la contraseña
+    //     role: dato.role
+    // });
 
-    //save() es una palabra reservada de mongoose
-    usuario.save((err, usuarioDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            })
-        }
+    // //save() es una palabra reservada de mongoose
+    // usuario.save((err, usuarioDB) => {
+    //     if (err) {
+    //         return res.status(400).json({
+    //             ok: false,
+    //             err
+    //         })
+    //     }
 
-        // usuarioDB.password = null;//Serviría para evitar mostrar el valor de la contraseña al momento de mostrar el resultado del insert
+    //     // usuarioDB.password = null;//Serviría para evitar mostrar el valor de la contraseña al momento de mostrar el resultado del insert
 
-        res.json({
-            ok: true,
-            usuario: usuarioDB
-        });
-    });
+    //     res.json({
+    //         ok: true,
+    //         usuario: usuarioDB
+    //     });
+    // });
 
     /****************************************************************************/
 
-    // if (dato.action) {
-    //     let opcion = dato.action;
+    if (dato.action) {
+        let opcion = dato.action;
 
-    //     const getInfo = async(opciones, datos) => {
+        const getInfo = async(opciones, datos) => {
 
-    //         try {
-    //             const resultado = await funciones.getOpcion(opciones, datos);
-    //             res.json({
-    //                 resultado
-    //             });
-    //         } catch (error) {
-    //             res.json({
-    //                 maloInfo3: opciones
-    //             });
-    //         }
+            try {
+                const resultado = await funciones.getOpcion(opciones, datos);
+                res.json({
+                    resultado
+                });
+            } catch (error) {
+                res.json({
+                    maloInfo3: opciones
+                });
+            }
 
-    //     }
+        }
 
-    //     getInfo(opcion, dato)
+        getInfo(opcion, dato)
 
-    // } else {
-    //     //En caso que el parámetro action venga vacío
-    //     res.json({
-    //         status: 'Error',
-    //         message: 'Malformed Request'
-    //     })
-    // }
+    } else {
+        //En caso que el parámetro action venga vacío
+        res.json({
+            status: 'Error',
+            message: 'Malformed Request'
+        })
+    }
 
 });
 
-app.get('/:action', function(req, res) {
+app.get('/:action', verificaToken, (req, res) => { //Como segundo parámetro del app.get, se le pasa una función para verificar el token que viene en los HEADERS
+    return res.json({
+        usuario: req.usuario,
+        nombre: req.usuario.nombre,
+        email: req.usuario.email
+    })
     let accion = req.params.action;
     let dato = req.query;
     dato = {
@@ -137,7 +143,7 @@ app.get('/:action', function(req, res) {
     }
 });
 
-app.put('/:action/:id/:status', function(req, res) {
+app.put('/:action/:id/:status', verificaToken, (req, res) => {
     let accion = req.params.action;
     let id = req.params.id;
     let status = req.params.status;

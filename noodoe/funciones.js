@@ -4,43 +4,61 @@ const axios = require('axios');
 const bcrypt = require('bcrypt');
 const Usuario = require('../server/models/usuario'); //Ésto es un objeto para el Schema
 
-const createOwner = (dat) => {
-    if (dat.ownerId && dat.status) {
-        // if (dat.action && dat.nombre) {
-        //     let usuario = new Usuario({ //Instancia del Schema Usuario
-        //         nombre: dat.nombre,
-        //         email: dat.email,
-        //         password: bcrypt.hashSync(dat.password, 10), //bcrypt.hashSync sirve para encriptar de una sola vía la contraseña
-        //         role: dat.role
-        //     });
+const createOwner = async(dat) => {
+    // if (dat.ownerId && dat.status) {
+    if (dat.action && dat.nombre) {
+        let usuario = new Usuario({ //Instancia del Schema Usuario
+            nombre: dat.nombre,
+            email: dat.email,
+            password: bcrypt.hashSync(dat.password, 10), //bcrypt.hashSync sirve para encriptar de una sola vía la contraseña
+            role: dat.role
+        });
 
-        //     // return usuario
+        // return usuario
 
-        //     //save() es una palabra reservada de mongoose
-        //     usuario.save((err, usuarioDB) => {
-        //         if (err) {
-        //             // return res.status(400).json({
-        //             //     ok: false,
-        //             //     err
-        //             // })
-        //             return {
-        //                 status: 400,
-        //                 ok: false
-        //                     // err
-        //             }
-        //         }
+        try {
+            usuario.save((err, usuarioDB) => {
+                if (err) {
+                    return {
+                        ok: false
+                    };
+                }
 
-        //         // usuarioDB.password = null;//Serviría para evitar mostrar el valor de la contraseña al momento de mostrar el resultado del insert
+                return {
+                    ok: true
+                };
+            });
+        } catch (error) {
+            return error;
+        }
+        //save() es una palabra reservada de mongoose
+        // const guarda = await usuario.save((err, usuarioDB) => {
 
-        //         // res.json({
-        //         //     ok: true,
-        //         //     usuario: usuarioDB
-        //         // });
-        //         return {
-        //             ok: true
-        //                 // usuario: usuarioDB
-        //         }
-        //     });
+        // if (err) {
+        //     // return res.status(400).json({
+        //     //     ok: false,
+        //     //     err
+        //     // })
+        //     return {
+        //         status: 400,
+        //         ok: false
+        //             // err
+        //     }
+        // }
+
+        // usuarioDB.password = null;//Serviría para evitar mostrar el valor de la contraseña al momento de mostrar el resultado del insert
+
+        // res.json({
+        //     ok: true,
+        //     usuario: usuarioDB
+        // });
+        // return {
+        //     ok: true
+        //         // usuario: usuarioDB
+        // }
+        // });
+
+        // return guarda;
 
         /******************************************************************/
 
