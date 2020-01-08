@@ -42,65 +42,23 @@ app.post('/login', (req, res) => {
             })
         }
 
-        //Consulta Centros de carga
-        ChargerCenter.find({}, (err, chargeCenterDB) => {
-            if (err) {
-                return res.status(500).json({
-                    ok: false,
-                    err
-                })
+        //Se genera el JWT
+        let token = jwt.sign({
+            user: {
+                name: usuarioDB.nombre,
+                email: usuarioDB.email,
+                role: usuarioDB.role
             }
+        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
 
-            if (!chargeCenterDB) {
-                return res.status(400).json({
-                    ok: false,
-                    err: {
-                        message: 'No se encontraron Centros de carga'
-                    }
-                })
-            }
-
-            //Consulta Centros de servicio
-            ServiceCenter.find({}, (err, serviceCenterDB) => {
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        err
-                    })
-                }
-
-                if (!serviceCenterDB) {
-                    return res.status(400).json({
-                        ok: false,
-                        err: {
-                            message: 'No se encontraron Centros de servicio'
-                        }
-                    });
-                }
-
-                //Se genera el JWT
-                let token = jwt.sign({
-                    user: {
-                        name: usuarioDB.nombre,
-                        email: usuarioDB.email,
-                        role: usuarioDB.role
-                    },
-                    chargerCenter: chargeCenterDB,
-                    serviceCenter: serviceCenterDB
-                }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
-
-                res.json({
-                    ok: true,
-                    user: {
-                        name: usuarioDB.nombre,
-                        email: usuarioDB.email,
-                        role: usuarioDB.role
-                    },
-                    chargerCenter: chargeCenterDB,
-                    serviceCenter: serviceCenterDB,
-                    token
-                });
-            });
+        res.json({
+            ok: true,
+            user: {
+                name: usuarioDB.nombre,
+                email: usuarioDB.email,
+                role: usuarioDB.role
+            },
+            token
         });
     });
     // res.json({

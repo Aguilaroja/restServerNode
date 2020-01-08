@@ -1,6 +1,6 @@
 //Marco de servidor
 const express = require('express');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const app = express();
 const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto para el Schema
