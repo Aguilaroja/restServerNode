@@ -4,8 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const app = express();
 const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
-const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto para el Schema
-const ServiceCenter = require('../models/service_center'); //Ésto es un objeto para el Schema
+const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
 
 app.post('/login', (req, res) => {
     let dato = req.body;
@@ -47,14 +46,74 @@ app.post('/login', (req, res) => {
             }
         }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
 
-        res.json({
-            ok: true,
-            user: {
-                name: usuarioDB.nombre,
-                email: usuarioDB.email,
-                role: usuarioDB.role
-            },
-            token
+        TokenLogin.findOne({ email: usuarioDB.email }, (err, usuarioTokenDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            if (!usuarioTokenDB) {
+                let tokenLogin = new TokenLogin({
+                    email: usuarioDB.email,
+                    tokenLog: token
+                });
+
+                tokenLogin.save((err, tokenLoginDB) => {
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            err
+                        })
+                    }
+
+                    res.json({
+                        ok: true,
+                        user: {
+                            name: usuarioDB.nombre,
+                            email: usuarioDB.email,
+                            role: usuarioDB.role
+                        },
+                        token
+                    });
+                });
+            } else {
+                let id = {
+                    _id: usuarioTokenDB._id
+                };
+                let cambiaToken = {
+                    tokenLog: token
+                };
+
+                TokenLogin.findOneAndUpdate(id, cambiaToken, { new: true }, (err, tokenActualizadoDB) => {
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            err
+                        })
+                    }
+
+                    if (!tokenActualizadoDB) {
+                        return res.status(400).json({
+                            ok: false,
+                            err: 'Token no actualizado'
+                        })
+                    }
+
+                    res.json({
+                        ok: true,
+                        user: {
+                            name: usuarioDB.nombre,
+                            email: usuarioDB.email,
+                            role: usuarioDB.role
+                        },
+                        token: tokenActualizadoDB.tokenLog
+                    });
+                });
+
+            }
+
         });
     });
 })
