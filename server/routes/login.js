@@ -7,7 +7,7 @@ const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schem
 const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
 
 app.get('/login', (req, res) => {
-    let dato = req.body;
+    let dato = req.query;
     let passwordIn = String(dato.password);
 
     return res.json({
