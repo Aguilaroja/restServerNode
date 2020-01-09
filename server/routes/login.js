@@ -6,15 +6,19 @@ const app = express();
 const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
 const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
 
-app.post('/login', (req, res) => {
+app.get('/login', (req, res) => {
     let dato = req.body;
     let passwordIn = String(dato.password);
 
     return res.json({
-        // dato,
-        email: dato.email,
-        pass: dato.password
+        dato
     });
+
+    // return res.json({
+    //     // dato,
+    //     email: dato.email,
+    //     pass: dato.password
+    // });
 
     //Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
