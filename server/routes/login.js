@@ -8,10 +8,28 @@ const TokenLogin = require('../models/token_login'); //Ésto es un objeto para e
 
 app.post('/login', (req, res) => {
     let dato = req.body;
+    let passwordIn;
+    passwordIn = JSON.stringify(dato.password);
 
-    return res.json({
-        dato: dato
-    })
+    // if (Number(dato.password)) {
+    //     passwordIn = JSON.stringify(dato.password);
+    //     return res.json({
+    //         passwordIn,
+    //         number: true
+    //     })
+    // } else {
+    //     passwordIn = dato.password;
+    //     return res.json({
+    //         passwordIn,
+    //         number: false
+    //     })
+    // }
+
+    // return res.json({
+    //     dato,
+    //     email: dato.email,
+    //     pass: dato.password
+    // });
 
     //Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
@@ -32,7 +50,7 @@ app.post('/login', (req, res) => {
         }
 
         //Compara que las contraseñas sean iguales ya encriptadas
-        if (!bcrypt.compareSync(dato.password, usuarioDB.password)) {
+        if (!bcrypt.compareSync(passwordIn, usuarioDB.password)) {
             return res.status(400).json({
                 ok: false,
                 err: {
