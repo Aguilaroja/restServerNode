@@ -8,8 +8,8 @@ const TokenLogin = require('../models/token_login'); //Ésto es un objeto para e
 
 app.post('/login', (req, res) => {
     let dato = req.body;
-    let passwordIn;
-    passwordIn = JSON.stringify(dato.password);
+    // let passwordIn = dato.password;
+    // let passwordIn = JSON.stringify(dato.password);
 
     // if (Number(dato.password)) {
     //     passwordIn = JSON.stringify(dato.password);
@@ -25,11 +25,11 @@ app.post('/login', (req, res) => {
     //     })
     // }
 
-    // return res.json({
-    //     dato,
-    //     email: dato.email,
-    //     pass: dato.password
-    // });
+    return res.json({
+        // dato,
+        email: dato.email,
+        pass: dato.password
+    });
 
     //Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
