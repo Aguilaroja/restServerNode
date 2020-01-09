@@ -13,11 +13,14 @@ const bodyParser = require('body-parser');
 
 // app.use(require('./routes/usuario')); //Aquí está en el curso
 
+//parse application/json
+app.use(bodyParser.json());
+
 //parse application/x-www-form-urlenconded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//parse application/json
-app.use(bodyParser.json());
+//parse application/raw
+// app.use(bodyParser.raw());
 
 app.use(require('./routes/index')); //Aquí lo uso yo
 

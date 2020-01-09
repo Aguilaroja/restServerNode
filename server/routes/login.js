@@ -9,6 +9,10 @@ const TokenLogin = require('../models/token_login'); //Ésto es un objeto para e
 app.post('/login', (req, res) => {
     let dato = req.body;
 
+    return res.json({
+        dato: dato
+    })
+
     //Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
         if (err) {
@@ -22,7 +26,7 @@ app.post('/login', (req, res) => {
             return res.status(400).json({
                 ok: false,
                 err: {
-                    message: 'Usuario o contraseña incorrectos'
+                    message: 'Usuario* o contraseña incorrectos'
                 }
             })
         }
@@ -32,7 +36,7 @@ app.post('/login', (req, res) => {
             return res.status(400).json({
                 ok: false,
                 err: {
-                    message: 'Usuario o contraseña incorrectos'
+                    message: 'Usuario o contraseña* incorrectos'
                 }
             })
         }
