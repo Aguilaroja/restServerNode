@@ -10,9 +10,9 @@ app.post('/login', (req, res) => {
     let dato = req.body;
     let passwordIn = String(dato.password);
 
-    return res.json({
-        dato
-    });
+    // return res.json({
+    //     dato
+    // });
 
     // return res.json({
     //     // dato,
@@ -133,9 +133,9 @@ app.get('/login', (req, res) => {
     let dato = req.query;
     let passwordIn = String(dato.password);
 
-    return res.json({
-        dato
-    });
+    // return res.json({
+    // dato
+    // });
 
     // return res.json({
     //     // dato,
