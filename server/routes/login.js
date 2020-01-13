@@ -14,12 +14,6 @@ app.post('/login', (req, res) => {
     //     dato
     // });
 
-    // return res.json({
-    //     // dato,
-    //     email: dato.email,
-    //     pass: dato.password
-    // });
-
     //Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
         if (err) {
@@ -122,9 +116,7 @@ app.post('/login', (req, res) => {
                         token: tokenActualizadoDB.tokenLog
                     });
                 });
-
             }
-
         });
     });
 });
@@ -135,12 +127,6 @@ app.get('/login', (req, res) => {
 
     // return res.json({
     // dato
-    // });
-
-    // return res.json({
-    //     // dato,
-    //     email: dato.email,
-    //     pass: dato.password
     // });
 
     //Consulta el usuario

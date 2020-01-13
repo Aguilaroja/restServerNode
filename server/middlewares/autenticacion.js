@@ -8,12 +8,19 @@ const TokenLogin = require('../models/token_login'); //Ésto es un objeto para e
 let verificaToken = (req, res, next) => {
     let token = req.get('token'); //Éste es el token que viene en los HEADERS al hacer la petición
 
-    TokenLogin.find({ tokenLog: token }, (err, tokenLoginDB) => {
+    TokenLogin.findOne({ tokenLog: token }, (err, tokenLoginDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
                 err
             })
+        }
+
+        if (!tokenLoginDB) {
+            return res.json({
+                ok: false,
+                message: 'No estás autenticado'
+            });
         }
 
         next();
@@ -49,6 +56,12 @@ let verificaAdminRole = (req, res, next) => {
             }
         })
     }
+}
+
+let verificaCliente = (req, res, next) => {
+    let user = req.get('client_key');
+
+    
 }
 
 module.exports = {
