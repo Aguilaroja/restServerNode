@@ -16,10 +16,15 @@ app.get('/:action', (req, res) => {
     let idArray = [];
     let resOrdenada = [];
 
-    // En caso que no se reciban coordenadas, le asigna la de Space Bar 
+    // En caso que no se reciban coordenadas, le asigna una por default
     if (!lat1 || !lon1) {
-        lat1 = 19.414023;
-        lon1 = -99.173065;
+        // Space Bar
+        // lat1 = 19.414023; 
+        // lon1 = -99.173065;
+
+        // Cibeles
+        lat1 = 19.419859;
+        lon1 = -99.166826;
     }
 
     function consultaDistancia(element, index, array) {
