@@ -8,8 +8,8 @@ const TokenLogin = require('../models/token_login'); //Ésto es un objeto para e
 const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
 const { verificaCliente } = require('../middlewares/autenticacion');
 
-app.post('/login', [verificaCliente], (req, res) => {
-    let dato = req.body;
+app.get('/login', [verificaCliente], (req, res) => {
+    let dato = req.query;
     let passwordIn = String(dato.password);
 
     // Consulta el usuario
