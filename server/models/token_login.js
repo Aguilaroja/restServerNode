@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+// const uniqueValidator = require('mongoose-unique-validator');
 
 //Validaciones personalizadas para roles
 // let rolesValidos = {
@@ -12,12 +12,16 @@ let Schema = mongoose.Schema;
 let tokenLoginSchema = new Schema({
     email: {
         type: String,
-        unique: true,
+        // unique: true,
         required: [true, 'El nombre es necesario']
     },
     tokenLog: {
         type: String,
         required: [true, 'schedule_mf es necesario']
+    },
+    date_ini: {
+        type: Date,
+        default: Date()
     }
 });
 
@@ -31,6 +35,6 @@ let tokenLoginSchema = new Schema({
 // }
 
 //Validaciones: Para éste plugin se necesita el paquete mongoose-unique-validator
-tokenLoginSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' }); //{PATH} es el dato que se declara como único 
+// tokenLoginSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' }); //{PATH} es el dato que se declara como único 
 
 module.exports = mongoose.model('TokenLogin', tokenLoginSchema);

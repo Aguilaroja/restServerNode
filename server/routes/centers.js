@@ -4,11 +4,9 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto para el Schema
 const ServiceCenter = require('../models/service_center'); //Ésto es un objeto para el Schema
+const { verificaToken, verificaCliente } = require('../middlewares/autenticacion');
 
-//Para futura validación del token
-// const { verificaToken } = require('../middlewares/autenticacion');
-// app.get('/:action', verificaToken, (req, res) => {
-app.get('/:action', (req, res) => {
+app.get('/:action', [verificaToken, verificaCliente], (req, res) => {
     let action = req.params.action;
     let lat1 = req.query.lat;
     let lon1 = req.query.lon;
@@ -28,7 +26,6 @@ app.get('/:action', (req, res) => {
     }
 
     function consultaDistancia(element, index, array) {
-        // console.log("a[" + index + "] = " + element);
 
         let r = 6371;
         let dLat = (element.latitude - lat1) * (Math.PI / 180);

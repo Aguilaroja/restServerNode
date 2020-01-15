@@ -1,12 +1,16 @@
 //Marco de servidor
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const app = express();
+const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
 const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto para el Schema
 const ServiceCenter = require('../models/service_center'); //Ésto es un objeto para el Schema
-const { verificaToken, verificaAdminRole } = require('../middlewares/autenticacion');
+const Client = require('../models/client'); //Ésto es un objeto para el Schema
+const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
+// const { verificaToken, verificaAdminRole } = require('../middlewares/autenticacion');
 
-app.post('/:create', [verificaToken, verificaAdminRole], (req, res) => {
+app.post('/:create', /*[verificaToken, verificaAdminRole],*/ (req, res) => {
     let accion = req.params.create;
     let dato = req.body;
 
@@ -69,6 +73,97 @@ app.post('/:create', [verificaToken, verificaAdminRole], (req, res) => {
                 service_center: serviceCenterDB
             });
         });
+
+    } else if (accion === 'client') {
+
+        let random = Math.round(Math.random() * (999999999 - 111111111) + 111111111);
+        let bRandom = bcrypt.hashSync(String(random), 10);
+        //Se genera el JWT
+        let token = jwt.sign({
+            client: {
+                id_client: bRandom,
+                name_client: dato.name_client,
+                address_client: dato.address_client
+            }
+        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
+
+        let client = new Client({ //Instancia del Schema Client
+            id_client: token,
+            name_client: dato.name_client,
+            key_client: bcrypt.hashSync(token, 10),
+            address_client: dato.address_client
+        });
+
+        // save() es una palabra reservada de mongoose
+        client.save((err, clientDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                })
+            }
+
+            res.json({
+                ok: true,
+                client: clientDB
+            });
+        });
+
+    } else if (accion === 'usuario') {
+
+        let usuario = new Usuario({ //Instancia del Schema Usuario
+            nombre: dato.nombre,
+            email: dato.email,
+            password: bcrypt.hashSync(dato.password, 10), //bcrypt.hashSync sirve para encriptar de una sola vía la contraseña
+            role: dato.role
+        });
+
+        //save() es una palabra reservada de mongoose
+        usuario.save((err, usuarioDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                })
+            }
+
+            res.json({
+                ok: true,
+                usuario: usuarioDB
+            });
+        });
+
+    } else if (accion === 'zynch') {
+
+        let zynch = new ZynchMoto({
+            email_user: dato.email,
+            name_zynch: dato.name,
+            swaps: dato.swaps,
+            valid_until: dato.valid_until
+        });
+
+        zynch.save((err, zynchDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                zynch: zynchDB
+            });
+        });
+
+    } else {
+
+        res.status(500).json({
+            ok: false,
+            err: {
+                message: 'Bad request'
+            }
+        })
     }
 
 });

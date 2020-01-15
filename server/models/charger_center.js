@@ -10,10 +10,6 @@ const uniqueValidator = require('mongoose-unique-validator');
 let Schema = mongoose.Schema;
 
 let chargerCenterSchema = new Schema({
-    id: {
-        type: Number,
-        unique: true
-    },
     name_center: {
         type: String,
         unique: true,

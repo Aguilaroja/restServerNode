@@ -19,6 +19,10 @@ let usuarioSchema = new Schema({
         unique: true,
         required: [true, 'El correo es necesario']
     },
+    telefono: {
+        type: Number,
+        required: false
+    },
     password: {
         type: String,
         required: [true, 'La contraseña es olbigatoria']

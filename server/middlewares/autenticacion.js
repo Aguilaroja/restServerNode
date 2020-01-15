@@ -2,7 +2,9 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
+const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
 const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
+const Client = require('../models/client'); //Ésto es un objeto para el Schema
 
 //Verificar Token
 let verificaToken = (req, res, next) => {
@@ -19,11 +21,30 @@ let verificaToken = (req, res, next) => {
         if (!tokenLoginDB) {
             return res.json({
                 ok: false,
-                message: 'No estás autenticado'
+                message: 'Token incorrecto'
             });
         }
 
-        next();
+        Usuario.findOne({ email: tokenLoginDB.email }, (err, usuarioDB) => {
+            if (err) {
+                return res.status(500), json({
+                    ok: false,
+                    err
+                });
+            }
+
+            if (!usuarioDB) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'No se encontró token->usuario'
+                    }
+                });
+            }
+
+            req.user = usuarioDB;
+            next();
+        });
     });
 
     /*******************************************************************/
@@ -59,12 +80,34 @@ let verificaAdminRole = (req, res, next) => {
 }
 
 let verificaCliente = (req, res, next) => {
-    let user = req.get('client_key');
+    let id = req.get('id');
+    let key = req.get('key_client');
 
-    
+    Client.findOne({ key_client: key, id_client: id }, (err, clientDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!clientDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Autenticación errónea'
+                }
+            });
+        }
+
+        req.dataClient = clientDB;
+
+        next();
+    });
 }
 
 module.exports = {
     verificaToken,
-    verificaAdminRole
+    verificaAdminRole,
+    verificaCliente
 };

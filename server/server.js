@@ -11,8 +11,6 @@ const app = express();
 //Da formato JSON a las respuestas
 const bodyParser = require('body-parser');
 
-// app.use(require('./routes/usuario')); //Aquí está en el curso
-
 //parse application/x-www-form-urlenconded
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -22,7 +20,7 @@ app.use(bodyParser.json());
 //parse application/raw
 // app.use(bodyParser.raw());
 
-app.use(require('./routes/index')); //Aquí lo uso yo
+app.use(require('./routes/index'));
 
 app.listen(process.env.PORT, () => {
     console.log(`Escuchando el puerto ${process.env.PORT}`);

@@ -5,16 +5,14 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
 const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
+const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
+const { verificaCliente } = require('../middlewares/autenticacion');
 
-app.post('/login', (req, res) => {
+app.post('/login', [verificaCliente], (req, res) => {
     let dato = req.body;
     let passwordIn = String(dato.password);
 
-    // return res.json({
-    //     dato
-    // });
-
-    //Consulta el usuario
+    // Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
@@ -32,7 +30,7 @@ app.post('/login', (req, res) => {
             })
         }
 
-        //Compara que las contraseñas sean iguales ya encriptadas
+        // Compara que las contraseñas sean iguales ya encriptadas
         if (!bcrypt.compareSync(passwordIn, usuarioDB.password)) {
             return res.status(400).json({
                 ok: false,
@@ -42,7 +40,7 @@ app.post('/login', (req, res) => {
             })
         }
 
-        //Se genera el JWT
+        // Genera el JWT
         let token = jwt.sign({
             user: {
                 name: usuarioDB.nombre,
@@ -51,192 +49,49 @@ app.post('/login', (req, res) => {
             }
         }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
 
-        TokenLogin.findOne({ email: usuarioDB.email }, (err, usuarioTokenDB) => {
+        let tokenLogin = new TokenLogin({
+            email: usuarioDB.email,
+            tokenLog: token
+        });
+
+        tokenLogin.save((err, tokenLoginDB) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
                     err
-                });
+                })
             }
 
-            if (!usuarioTokenDB) {
-                let tokenLogin = new TokenLogin({
-                    email: usuarioDB.email,
-                    tokenLog: token
+            ZynchMoto.find({ email_user: dato.email }, (err, zynchDB) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        err
+                    })
+                }
+
+                if (!zynchDB) {
+                    return res.status(400).json({
+                        ok: false,
+                        err: {
+                            message: 'Email incorrecto'
+                        }
+                    })
+                }
+
+                res.json({
+                    ok: true,
+                    user: {
+                        name: usuarioDB.nombre,
+                        email: usuarioDB.email,
+                        role: usuarioDB.role
+                    },
+                    zynch: zynchDB,
+                    token
                 });
-
-                tokenLogin.save((err, tokenLoginDB) => {
-                    if (err) {
-                        return res.status(500).json({
-                            ok: false,
-                            err
-                        })
-                    }
-
-                    res.json({
-                        ok: true,
-                        user: {
-                            name: usuarioDB.nombre,
-                            email: usuarioDB.email,
-                            role: usuarioDB.role
-                        },
-                        token
-                    });
-                });
-            } else {
-                let id = {
-                    _id: usuarioTokenDB._id
-                };
-                let cambiaToken = {
-                    tokenLog: token
-                };
-
-                TokenLogin.findOneAndUpdate(id, cambiaToken, { new: true }, (err, tokenActualizadoDB) => {
-                    if (err) {
-                        return res.status(500).json({
-                            ok: false,
-                            err
-                        })
-                    }
-
-                    if (!tokenActualizadoDB) {
-                        return res.status(400).json({
-                            ok: false,
-                            err: 'Token no actualizado'
-                        })
-                    }
-
-                    res.json({
-                        ok: true,
-                        user: {
-                            name: usuarioDB.nombre,
-                            email: usuarioDB.email,
-                            role: usuarioDB.role
-                        },
-                        token: tokenActualizadoDB.tokenLog
-                    });
-                });
-            }
+            });
         });
     });
 });
-
-app.get('/login', (req, res) => {
-    let dato = req.query;
-    let passwordIn = String(dato.password);
-
-    // return res.json({
-    // dato
-    // });
-
-    //Consulta el usuario
-    Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                err
-            })
-        }
-
-        if (!usuarioDB) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'Usuario* o contraseña incorrectos'
-                }
-            })
-        }
-
-        //Compara que las contraseñas sean iguales ya encriptadas
-        if (!bcrypt.compareSync(passwordIn, usuarioDB.password)) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'Usuario o contraseña* incorrectos'
-                }
-            })
-        }
-
-        //Se genera el JWT
-        let token = jwt.sign({
-            user: {
-                name: usuarioDB.nombre,
-                email: usuarioDB.email,
-                role: usuarioDB.role
-            }
-        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
-
-        TokenLogin.findOne({ email: usuarioDB.email }, (err, usuarioTokenDB) => {
-            if (err) {
-                return res.status(500).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            if (!usuarioTokenDB) {
-                let tokenLogin = new TokenLogin({
-                    email: usuarioDB.email,
-                    tokenLog: token
-                });
-
-                tokenLogin.save((err, tokenLoginDB) => {
-                    if (err) {
-                        return res.status(500).json({
-                            ok: false,
-                            err
-                        })
-                    }
-
-                    res.json({
-                        ok: true,
-                        user: {
-                            name: usuarioDB.nombre,
-                            email: usuarioDB.email,
-                            role: usuarioDB.role
-                        },
-                        token
-                    });
-                });
-            } else {
-                let id = {
-                    _id: usuarioTokenDB._id
-                };
-                let cambiaToken = {
-                    tokenLog: token
-                };
-
-                TokenLogin.findOneAndUpdate(id, cambiaToken, { new: true }, (err, tokenActualizadoDB) => {
-                    if (err) {
-                        return res.status(500).json({
-                            ok: false,
-                            err
-                        })
-                    }
-
-                    if (!tokenActualizadoDB) {
-                        return res.status(400).json({
-                            ok: false,
-                            err: 'Token no actualizado'
-                        })
-                    }
-
-                    res.json({
-                        ok: true,
-                        user: {
-                            name: usuarioDB.nombre,
-                            email: usuarioDB.email,
-                            role: usuarioDB.role
-                        },
-                        token: tokenActualizadoDB.tokenLog
-                    });
-                });
-
-            }
-
-        });
-    });
-});
-
 
 module.exports = app;

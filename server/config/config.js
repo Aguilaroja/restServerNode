@@ -14,9 +14,9 @@ process.env.SEED = process.env.SEED || 'este-es-el-seed-de-desarrollo';
 let urlDB;
 
 if (process.env.NODE_ENV === 'dev') {
-    urlDB = 'mongodb://localhost:27017/cafe';
+    urlDB = 'mongodb://localhost:27017/spacebar';
 } else {
-    //Ésta variable de entorno es para que no esté pública el usuario y contraseña de la DB en MongoAtlas
+    //Ésta variable de entorno es para que no esté pública el usuario y contraseña de la DB de MongoAtlas
     urlDB = process.env.MONGO_URL;
 }
 
