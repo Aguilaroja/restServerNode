@@ -21,15 +21,20 @@ function formatoFecha(element, index, zynchs) {
 
         if (fch.getTime() <= hoy.getTime()) {
             motoObject.expired = true;
-            ZynchMoto.findOneAndUpdate({ _id: motoObject._id }, { expired: true }, (err, motoActDB) => {
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        err
-                    });
-                }
-            });
+        } else {
+            motoObject.expired = false;
         }
+
+        ZynchMoto.findOneAndUpdate({ _id: motoObject._id }, { expired: motoObject.expired }, (err, motoActDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            console.log(`Expiración actualizada a: ${motoObject.expired}`)
+        });
 
         return motoObject;
     }
