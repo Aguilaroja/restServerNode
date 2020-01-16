@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto para el Schema
 const ServiceCenter = require('../models/service_center'); //Ésto es un objeto para el Schema
-const { verificaToken, verificaCliente } = require('../middlewares/autenticacion');
+const { verificaCliente } = require('../middlewares/autenticacion');
 
-app.get('/:action', [verificaCliente, verificaToken], (req, res) => {
+app.get('/:action', [verificaCliente], (req, res) => {
     let action = req.params.action;
     let lat1 = req.query.lat;
     let lon1 = req.query.lon;

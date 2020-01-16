@@ -21,6 +21,46 @@ app.get('/login', [verificaCliente], (req, res) => {
     //     ip
     // });
 
+    let meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic"
+    ];
+
+    // function fechas(element, index, zynchs) {
+    //     var motoZynch = element;
+    //     var fch = new Date(motoZynch.valid_until);
+    //     var ani = fch.getUTCFullYear();
+    //     var mes = fch.getUTCMonth();
+    //     var dia = fch.getUTCDate();
+    //     var letra = `${dia} de ${meses[mes]} del ${ani}`;
+
+    //     motoZynch.methods.toJSON = function() {
+    //         let moto = this;
+    //         let motoObject = moto.toObject();
+    //         motoObject.valid_until = ;
+
+    //         return userObject;
+    //     }
+
+    //     var valid = motoZynch.valid_until;
+    //     valid = letra;
+
+    //     console.log(valid);
+    //     console.log(ani);
+    //     console.log(mes);
+    //     console.log(dia);
+    // }
+
     // Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
         if (err) {
@@ -128,6 +168,10 @@ app.get('/login', [verificaCliente], (req, res) => {
                             }
                         })
                     }
+
+                    // let y, m, d;
+
+                    // zynchDB.forEach(fechas);
 
                     res.json({
                         ok: true,
