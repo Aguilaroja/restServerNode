@@ -18,6 +18,10 @@ let zynchMotoSchema = new Schema({
     valid_until: {
         type: Date,
         default: Date()
+    },
+    expired: {
+        type: Boolean,
+        default: false
     }
 });
 

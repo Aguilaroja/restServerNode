@@ -7,59 +7,12 @@ const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schem
 const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
 const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
 const { verificaCliente } = require('../middlewares/autenticacion');
+const formatoFecha = require('../functions/formatoFecha');
 
 app.get('/login', [verificaCliente], (req, res) => {
     let dato = req.query;
     let passwordIn = String(dato.password);
     let ip = req.ip;
-
-    // console.log(ip)
-
-    // return res.json({
-    //     dato,
-    //     passwordIn,
-    //     ip
-    // });
-
-    let meses = [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dic"
-    ];
-
-    // function fechas(element, index, zynchs) {
-    //     var motoZynch = element;
-    //     var fch = new Date(motoZynch.valid_until);
-    //     var ani = fch.getUTCFullYear();
-    //     var mes = fch.getUTCMonth();
-    //     var dia = fch.getUTCDate();
-    //     var letra = `${dia} de ${meses[mes]} del ${ani}`;
-
-    //     motoZynch.methods.toJSON = function() {
-    //         let moto = this;
-    //         let motoObject = moto.toObject();
-    //         motoObject.valid_until = ;
-
-    //         return userObject;
-    //     }
-
-    //     var valid = motoZynch.valid_until;
-    //     valid = letra;
-
-    //     console.log(valid);
-    //     console.log(ani);
-    //     console.log(mes);
-    //     console.log(dia);
-    // }
 
     // Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
@@ -139,6 +92,8 @@ app.get('/login', [verificaCliente], (req, res) => {
                             })
                         }
 
+                        zynchDB.forEach(formatoFecha);
+
                         res.json({
                             ok: true,
                             user: {
@@ -169,9 +124,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                         })
                     }
 
-                    // let y, m, d;
-
-                    // zynchDB.forEach(fechas);
+                    zynchDB.forEach(formatoFecha);
 
                     res.json({
                         ok: true,
