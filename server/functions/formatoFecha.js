@@ -17,8 +17,9 @@ function formatoFecha(element, index, zynchs) {
         let motoObject = this.toObject();
         motoObject.valid_until = letra;
 
-        var hoy = new Date();
-        if (fch.getTime() < hoy.getTime()) {
+        let hoy = new Date();
+
+        if (fch.getTime() <= hoy.getTime()) {
             motoObject.expired = true;
             ZynchMoto.findOneAndUpdate({ _id: motoObject._id }, { expired: true }, (err, motoActDB) => {
                 if (err) {
