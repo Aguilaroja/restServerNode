@@ -11,6 +11,15 @@ const { verificaCliente } = require('../middlewares/autenticacion');
 app.get('/login', [verificaCliente], (req, res) => {
     let dato = req.query;
     let passwordIn = String(dato.password);
+    let ip = req.ip;
+
+    // console.log(ip)
+
+    // return res.json({
+    //     dato,
+    //     passwordIn,
+    //     ip
+    // });
 
     // Consulta el usuario
     Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
@@ -51,7 +60,8 @@ app.get('/login', [verificaCliente], (req, res) => {
 
         let tokenLogin = new TokenLogin({
             email: usuarioDB.email,
-            tokenLog: token
+            tokenLog: token,
+            ip_address: ip
         });
 
         tokenLogin.save((err, tokenLoginDB) => {

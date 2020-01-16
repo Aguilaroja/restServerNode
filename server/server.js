@@ -26,6 +26,15 @@ app.listen(process.env.PORT, () => {
     console.log(`Escuchando el puerto ${process.env.PORT}`);
 });
 
+app.set('trust proxy', (ip) => {
+    // if (ip === '127.0.0.1' || ip === '123.123.123.123') {
+    //     console.log(true);
+    // } else {
+    //     console.log(false);
+    // }
+    console.log(ip)
+});
+
 mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
     (err, res) => {
         if (err) throw err;

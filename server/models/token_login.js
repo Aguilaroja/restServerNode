@@ -22,6 +22,9 @@ let tokenLoginSchema = new Schema({
     date_ini: {
         type: Date,
         default: Date()
+    },
+    ip_address: {
+        type: String
     }
 });
 
