@@ -2,10 +2,10 @@
 const express = require('express');
 const app = express();
 const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
-const { verificaCliente } = require('../middlewares/autenticacion');
+const { verificaTokenDB, verificaCliente } = require('../middlewares/autenticacion');
 const formatoFecha = require('../functions/formatoFecha');
 
-app.get('/zynchs', [verificaCliente], (req, res) => {
+app.get('/zynchs', [verificaTokenDB, verificaCliente], (req, res) => {
     let dato = req.query;
 
     ZynchMoto.find({ email_user: dato.email }, (err, zynchDB) => {

@@ -37,8 +37,8 @@ app.get('/mail', [verificaCliente], (req, res) => {
 
         let destinatario = usuarioDB.email;
         let token = 'tokendarizado';
-        // let output = `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="https://restservernode-ar.herokuapp.com/recovery/${token}">Actualiza aquí</a>`;
-        let output = `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="localhost:3000/recovery/${token}">Actualiza aquí</a>`;
+        let output = `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="https://restservernode-ar.herokuapp.com/recovery/${token}">Actualiza aquí</a>`;
+        // let output = `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="localhost:3000/recovery/${token}">Actualiza aquí</a>`;
 
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
