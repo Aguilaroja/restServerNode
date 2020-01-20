@@ -29,13 +29,7 @@ app.get('/zynchs', [verificaCliente], (req, res) => {
 
         res.json({
             ok: true,
-            user: {
-                name: usuarioDB.nombre,
-                email: usuarioDB.email,
-                role: usuarioDB.role
-            },
-            zynch: zynchDB,
-            token
+            zynch: zynchDB
         });
     });
 });

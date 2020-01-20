@@ -29,14 +29,4 @@ let zynchMotoSchema = new Schema({
     }
 });
 
-//Mediante ésta método se modifica el objeto de respuesta del Schema, aquí se omite el dato password
-zynchMotoSchema.methods.toJSON = function() {
-    let moto = this;
-    let motoObject = moto.toObject();
-    delete motoObject.email_user;
-
-    return motoObject;
-}
-
-
 module.exports = mongoose.model('ZynchMoto', zynchMotoSchema);

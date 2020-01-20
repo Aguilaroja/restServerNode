@@ -75,7 +75,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                         })
                     }
 
-                    ZynchMoto.find({ email_user: dato.email }, (err, zynchDB) => {
+                    ZynchMoto.findOne({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
                         if (err) {
                             return res.status(500).json({
                                 ok: false,
@@ -94,6 +94,9 @@ app.get('/login', [verificaCliente], (req, res) => {
 
                         zynchDB.forEach(formatoFecha);
 
+                        let objetoZynch = Object.assign({}, zynchDB);
+                        objetoZynch = objetoZynch[0];
+
                         res.json({
                             ok: true,
                             user: {
@@ -101,13 +104,13 @@ app.get('/login', [verificaCliente], (req, res) => {
                                 email: usuarioDB.email,
                                 role: usuarioDB.role
                             },
-                            zynch: zynchDB,
+                            zynch: objetoZynch,
                             token
                         });
                     });
                 });
             } else {
-                ZynchMoto.find({ email_user: dato.email }, (err, zynchDB) => {
+                ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
                     if (err) {
                         return res.status(500).json({
                             ok: false,
@@ -126,6 +129,9 @@ app.get('/login', [verificaCliente], (req, res) => {
 
                     zynchDB.forEach(formatoFecha);
 
+                    let objetoZynch = Object.assign({}, zynchDB);
+                    objetoZynch = objetoZynch[0];
+
                     res.json({
                         ok: true,
                         user: {
@@ -133,7 +139,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                             email: usuarioDB.email,
                             role: usuarioDB.role
                         },
-                        zynch: zynchDB,
+                        zynch: objetoZynch,
                         token
                     });
                 });

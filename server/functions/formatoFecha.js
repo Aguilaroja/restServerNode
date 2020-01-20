@@ -16,6 +16,7 @@ function formatoFecha(element, index, zynchs) {
     motoZynch.toJSON = function() {
         let motoObject = this.toObject();
         motoObject.valid_until = letra;
+        delete motoObject.email_user;
 
         let hoy = new Date();
 
