@@ -75,7 +75,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                         })
                     }
 
-                    ZynchMoto.findOne({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
+                    ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
                         if (err) {
                             return res.status(500).json({
                                 ok: false,
