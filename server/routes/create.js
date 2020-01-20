@@ -138,7 +138,8 @@ app.post('/:create', (req, res) => {
             email_user: dato.email,
             name_zynch: dato.name,
             swaps: dato.swaps,
-            valid_until: dato.valid_until
+            valid_until: dato.valid_until,
+            serie: dato.serie
         });
 
         zynch.save((err, zynchDB) => {
