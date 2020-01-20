@@ -8,9 +8,8 @@ const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto 
 const ServiceCenter = require('../models/service_center'); //Ésto es un objeto para el Schema
 const Client = require('../models/client'); //Ésto es un objeto para el Schema
 const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
-// const { verificaToken, verificaAdminRole } = require('../middlewares/autenticacion');
 
-app.post('/:create', /*[verificaToken, verificaAdminRole],*/ (req, res) => {
+app.post('/:create', (req, res) => {
     let accion = req.params.create;
     let dato = req.body;
 

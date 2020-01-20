@@ -6,8 +6,8 @@ const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schem
 const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
 const Client = require('../models/client'); //Ésto es un objeto para el Schema
 
-//Verificar Token
-let verificaToken = (req, res, next) => {
+//Verificar TokenDB
+let verificaTokenDB = (req, res, next) => {
     let token = req.get('token'); //Éste es el token que viene en los HEADERS al hacer la petición
 
     TokenLogin.findOne({ tokenLog: token }, (err, tokenLoginDB) => {
@@ -46,21 +46,23 @@ let verificaToken = (req, res, next) => {
             next();
         });
     });
+}
 
-    /*******************************************************************/
-    //El siguiente código es para verificar el token con caducidad por JWT
+//El siguiente código es para verificar el token con caducidad por JWT
+let verificaTokenJWT = (req, res, next) => {
+    let token = req.get('token'); //Éste es el token que viene en los HEADERS al hacer la petición
 
-    // jwt.verify(token, process.env.SEED, (err, decoded) => {
-    //     if (err) {
-    //         return res.status(401).json({
-    //             ok: false,
-    //             err
-    //         })
-    //     }
+    jwt.verify(token, process.env.SEED, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                err
+            })
+        }
 
-    //     req.user = decoded.user;
-    //     next();
-    // });
+        req.user = decoded.user;
+        next();
+    });
 }
 
 //Verifica AdminRole
@@ -107,7 +109,8 @@ let verificaCliente = (req, res, next) => {
 }
 
 module.exports = {
-    verificaToken,
+    verificaTokenDB,
+    verificaTokenJWT,
     verificaAdminRole,
     verificaCliente
 };

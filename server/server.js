@@ -7,6 +7,15 @@ require('./config/config');
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const hbs = require('hbs');
+
+//Sirve para mostrar una página HTML
+app.use(express.static(__dirname + '/public'));
+//Para especificar en la URL un archivo diferente, en la URL se debe escribir con todo y extensión del archivo
+
+//Express HBS (Handlebars) engine
+hbs.registerPartials(__dirname + '/views/partials'); //Las carpetas deben estar escritas en inglés
+app.set('view engine', 'hbs');
 
 //Da formato JSON a las respuestas
 const bodyParser = require('body-parser');
