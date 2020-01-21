@@ -4,6 +4,10 @@ const uniqueValidator = require('mongoose-unique-validator');
 let Schema = mongoose.Schema;
 
 let zynchPackSchema = new Schema({
+    email_user: {
+        type: String,
+        required: true
+    },
     name_pack: {
         type: String,
         required: true
