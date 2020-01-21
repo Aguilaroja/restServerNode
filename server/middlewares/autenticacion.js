@@ -50,7 +50,8 @@ let verificaTokenDB = (req, res, next) => {
 
 //El siguiente código es para verificar el token con caducidad por JWT
 let verificaTokenJWT = (req, res, next) => {
-    let token = req.get('token'); //Éste es el token que viene en los HEADERS al hacer la petición
+    // let token = req.get('token'); //Éste es el token que viene en los HEADERS al hacer la petición
+    let token = req.body.token;
 
     jwt.verify(token, process.env.SEED, (err, decoded) => {
         if (err) {

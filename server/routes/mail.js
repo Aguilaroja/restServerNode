@@ -45,10 +45,10 @@ app.get('/mail', [verificaCliente], (req, res) => {
                 email: usuarioDB.email,
                 role: usuarioDB.role
             }
-        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
+        }, process.env.SEED, { expiresIn: 60 * 5 }); // Expira en 5 minutos
 
         let output = `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="https://restservernode-ar.herokuapp.com/recovery?token=${token}">Actualiza aquí</a>`;
-        output += `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="localhost:3000/recovery?token=${token}">Actualiza aquí</a>`;
+        // output += `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="localhost:3000/recovery?token=${token}">Actualiza aquí</a>`;
 
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({

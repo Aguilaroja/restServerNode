@@ -7,13 +7,19 @@ $('#btnactualizapass').click(function() {
     } else {
         $.ajax({
             type: 'POST',
-            // url: 'localhost:3000/updatepass',
-            url: 'https://restservernode-ar.herokuapp.com/updatepass',
+            url: '/updatepass',
             data: {
-                token: $('#token').val()
+                token: $('#token').val(),
+                pass1,
+                pass2
             },
             success: function(param) {
-                console.log(param);
+                console.log(param.ok);
+                if (param.ok == true) {
+                    $('.centrado').html('Contraseña actualizada exitosamente');
+                } else {
+                    $('#error').html('Hubo un problema interno, no se actualizó la contraseña');
+                }
             },
             error: function(error) {
                 console.log(error);

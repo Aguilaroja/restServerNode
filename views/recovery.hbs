@@ -16,24 +16,28 @@
     </nav>
 
     {{!-- <div class="jumbotron"> --}}
-        {{!-- <form> --}}
+        {{!-- <form method="POST" action="https://restservernode-ar.herokuapp.com/updatepass"> --}}
+        {{!-- <form method="POST" action="/updatepass"> --}}
             <div class="centrado">
+                <div class="form-group">
+                    <label for="">{{nombre}}</label>
+                </div>
             {{!-- <div class="form-row"> --}}
                 <div class="form-group">
                     <label for="password_one">Password new</label>
-                    <input type="password" class="form-control" id="password_one" placeholder="Password new">
+                    <input type="password" class="form-control" id="password_one" name="password_one" placeholder="Password new">
                 </div>
             {{!-- </div> --}}
             {{!-- <div class="form-row"> --}}
                 <div class="form-group">
                     <label for="password_two">Password confirm</label>
-                    <input type="password" class="form-control" id="password_two" placeholder="Password confirm" aria-describedby="error">
+                    <input type="password" class="form-control" id="password_two" name="password_two" placeholder="Password confirm" aria-describedby="error">
                     <small id="error" class="form-text text-muted"></small>
                 </div>
             {{!-- </div> --}}
             {{!-- <div class="form-row"> --}}
                 <button type="button" id="btnactualizapass" class="btn btn-primary">Actualizar contraseña</button>
-                <input type="hidden" id="token" value="{{token}}"/>
+                <input type="hidden" id="token" name="token" value="{{token}}">
             {{!-- </div> --}}
             </div>
         {{!-- </form> --}}
