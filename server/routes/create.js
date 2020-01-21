@@ -8,6 +8,7 @@ const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto 
 const ServiceCenter = require('../models/service_center'); //Ésto es un objeto para el Schema
 const Client = require('../models/client'); //Ésto es un objeto para el Schema
 const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchPack = require('../models/zynch_pack'); //Ésto es un objeto para el Schema
 
 app.post('/:create', (req, res) => {
     let accion = req.params.create;
@@ -132,17 +133,16 @@ app.post('/:create', (req, res) => {
             });
         });
 
-    } else if (accion === 'zynch') {
+    } else if (accion === 'zynch_moto') {
 
-        let zynch = new ZynchMoto({
+        let zynch_moto = new ZynchMoto({
             email_user: dato.email,
             name_zynch: dato.name,
             swaps: dato.swaps,
-            valid_until: dato.valid_until,
             serie: dato.serie
         });
 
-        zynch.save((err, zynchDB) => {
+        zynch_moto.save((err, zynchDB) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
@@ -153,6 +153,30 @@ app.post('/:create', (req, res) => {
             res.json({
                 ok: true,
                 zynch: zynchDB
+            });
+        });
+
+    } else if (accion === 'zynch_pack') {
+
+        let zynch_pack = new ZynchPack({
+            name_pack: dato.name,
+            total_swaps: dato.total_swaps,
+            available_swaps: dato.available_swaps,
+            serie: dato.serie,
+            valid_until: dato.valid_until
+        });
+
+        zynch_pack.save((err, zynchPackDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                zynch: zynchPackDB
             });
         });
 

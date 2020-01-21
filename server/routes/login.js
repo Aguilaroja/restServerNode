@@ -7,7 +7,7 @@ const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schem
 const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
 const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
 const { verificaCliente } = require('../middlewares/autenticacion');
-const formatoFecha = require('../functions/formatoFecha');
+// const formatoFecha = require('../functions/formatoFecha');
 
 app.get('/login', [verificaCliente], (req, res) => {
     let dato = req.query;
@@ -92,7 +92,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                             })
                         }
 
-                        zynchDB.forEach(formatoFecha);
+                        // zynchDB.forEach(formatoFecha);
 
                         let objetoZynch = Object.assign({}, zynchDB);
                         objetoZynch = objetoZynch[0];
@@ -127,7 +127,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                         })
                     }
 
-                    zynchDB.forEach(formatoFecha);
+                    // zynchDB.forEach(formatoFecha);
 
                     let objetoZynch = Object.assign({}, zynchDB);
                     objetoZynch = objetoZynch[0];

@@ -3,12 +3,8 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 let Schema = mongoose.Schema;
 
-let zynchMotoSchema = new Schema({
-    email_user: {
-        type: String,
-        required: true
-    },
-    name_zynch: {
+let zynchPackSchema = new Schema({
+    name_pack: {
         type: String,
         required: true
     },
@@ -17,17 +13,25 @@ let zynchMotoSchema = new Schema({
         required: true,
         unique: true
     },
-    swaps: {
+    total_swaps: {
         type: Number,
         required: true
     },
-    predetermined: {
+    available_swaps: {
+        type: Number,
+        required: true
+    },
+    valid_until: {
+        type: Date,
+        default: Date()
+    },
+    expired: {
         type: Boolean,
         default: false
-    }
+    },
 });
 
 //Validaciones: Para éste plugin se necesita el paquete mongoose-unique-validator
-zynchMotoSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' }); //{PATH} es el dato que se declara como único 
+zynchPackSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' }); //{PATH} es el dato que se declara como único 
 
-module.exports = mongoose.model('ZynchMoto', zynchMotoSchema);
+module.exports = mongoose.model('ZynchPack', zynchPackSchema);
