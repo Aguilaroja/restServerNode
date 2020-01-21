@@ -7,13 +7,17 @@ const hbs = require('hbs');
 // const { verificaCliente } = require('../middlewares/autenticacion');
 
 app.get('/recovery', (req, res) => {
-    // let email = req.query.email;
+    let token = req.query.token;
 
-    res.render('recovery');
+    res.render('recovery', {
+        token: token,
+        anio: new Date().getFullYear()
+    });
+});
 
-    // return res.json({
-    //     ok: true
-    // });
+app.post('/updatepass', (req, res) => {
+    let token = req.body;
+    console.log(token);
 });
 
 module.exports = app;

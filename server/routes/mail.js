@@ -2,6 +2,7 @@
 //Marco de servidor
 const express = require('express');
 const app = express();
+const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
 const { verificaCliente } = require('../middlewares/autenticacion');
@@ -36,9 +37,18 @@ app.get('/mail', [verificaCliente], (req, res) => {
         }
 
         let destinatario = usuarioDB.email;
-        let token = 'tokendarizado';
-        let output = `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="https://restservernode-ar.herokuapp.com/recovery/${token}">Actualiza aquí</a>`;
-        // let output = `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="localhost:3000/recovery/${token}">Actualiza aquí</a>`;
+
+        // Genera el JWT
+        let token = jwt.sign({
+            user: {
+                name: usuarioDB.nombre,
+                email: usuarioDB.email,
+                role: usuarioDB.role
+            }
+        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
+
+        let output = `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="https://restservernode-ar.herokuapp.com/recovery?token=${token}">Actualiza aquí</a>`;
+        output += `<b>Recuperación de contraseña</b><p>Link para actualizar contraseña: </p><a href="localhost:3000/recovery?token=${token}">Actualiza aquí</a>`;
 
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({

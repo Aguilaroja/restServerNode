@@ -8,6 +8,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const hbs = require('hbs');
+const path = require('path');
 
 //Sirve para mostrar una página HTML
 app.use(express.static(__dirname + '/public'));
@@ -15,6 +16,7 @@ app.use(express.static(__dirname + '/public'));
 
 //Express HBS (Handlebars) engine
 hbs.registerPartials(__dirname + '/views/partials'); //Las carpetas deben estar escritas en inglés
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'hbs');
 
 //Da formato JSON a las respuestas

@@ -7,3 +7,11 @@ footer {
     text-align: center;
     padding: 15px;
 }
+
+.centrado {
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 10%;
+}
