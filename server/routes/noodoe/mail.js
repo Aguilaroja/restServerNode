@@ -4,8 +4,8 @@ const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
-const { verificaCliente } = require('../middlewares/autenticacion');
+const Usuario = require('../../models/usuario'); //Ésto es un objeto para el Schema
+const { verificaCliente } = require('../../middlewares/autenticacion');
 
 app.get('/mail', [verificaCliente], (req, res) => {
     let email = req.query.email;

@@ -2,9 +2,9 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const app = express();
-const ChargerCenter = require('../models/charger_center'); //Ésto es un objeto para el Schema
-const ServiceCenter = require('../models/service_center'); //Ésto es un objeto para el Schema
-const { verificaTokenDB } = require('../middlewares/autenticacion');
+const ChargerCenter = require('../../models/charger_center'); //Ésto es un objeto para el Schema
+const ServiceCenter = require('../../models/service_center'); //Ésto es un objeto para el Schema
+const { verificaTokenDB } = require('../../middlewares/autenticacion');
 
 app.put('/:update', [verificaTokenDB], (req, res) => {
     let accion = req.params.update;

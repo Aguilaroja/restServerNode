@@ -97,21 +97,22 @@ const updateOwnerInfo = (dat) => {
 }
 
 const getOwnerInfo = (dat) => {
-    if (dat.dato.id) {
-        return {
-            type: 'getOwnerInfo',
-            status: ['active', 'disable'],
-            message: 'Not implemented',
-            batteryIds: ['Id0', 'Id1', 'Id2', 'Id3']
-        }
-    } else {
-        return {
-            status: 'Error',
-            type: 'getOwnerInfo',
-            error: 'Error code',
-            message: 'No ownerId'
-        }
+    // if (dat.dato.id) {
+    return {
+        dat,
+        type: 'getOwnerInfo',
+        status: ['active', 'disable'],
+        message: 'Not implemented',
+        batteryIds: ['Id0', 'Id1', 'Id2', 'Id3']
     }
+    // } else {
+    //     return {
+    //         status: 'Error',
+    //         type: 'getOwnerInfo',
+    //         error: 'Error code',
+    //         message: 'No ownerId'
+    //     }
+    // }
 }
 
 const getSwapRecord = (dat) => {

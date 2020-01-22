@@ -2,8 +2,8 @@
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
-const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
-const { verificaTokenJWT } = require('../middlewares/autenticacion');
+const Usuario = require('../../models/usuario'); //Ésto es un objeto para el Schema
+const { verificaTokenJWT } = require('../../middlewares/autenticacion');
 
 app.post('/updatepass', [verificaTokenJWT], (req, res) => {
     let user = req.user;

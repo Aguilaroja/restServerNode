@@ -3,11 +3,12 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const app = express();
-const Usuario = require('../models/usuario'); //Ésto es un objeto para el Schema
-const TokenLogin = require('../models/token_login'); //Ésto es un objeto para el Schema
-const ZynchMoto = require('../models/zynch_moto'); //Ésto es un objeto para el Schema
-const { verificaCliente } = require('../middlewares/autenticacion');
-// const formatoFecha = require('../functions/formatoFecha');
+const Usuario = require('../../models/usuario'); //Ésto es un objeto para el Schema
+const TokenLogin = require('../../models/token_login'); //Ésto es un objeto para el Schema
+const ZynchMoto = require('../../models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchPack = require('../../models/zynch_pack'); //Ésto es un objeto para el Schema
+const { verificaCliente } = require('../../middlewares/autenticacion');
+const formatoFecha = require('../../functions/formatoFecha');
 
 app.get('/login', [verificaCliente], (req, res) => {
     let dato = req.query;
@@ -92,20 +93,40 @@ app.get('/login', [verificaCliente], (req, res) => {
                             })
                         }
 
-                        // zynchDB.forEach(formatoFecha);
-
                         let objetoZynch = Object.assign({}, zynchDB);
                         objetoZynch = objetoZynch[0];
 
-                        res.json({
-                            ok: true,
-                            user: {
-                                name: usuarioDB.nombre,
-                                email: usuarioDB.email,
-                                role: usuarioDB.role
-                            },
-                            zynch: objetoZynch,
-                            token
+                        ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
+                            if (err) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    err
+                                });
+                            }
+
+                            if (!zynchPackDB) {
+                                return res.status(400).json({
+                                    ok: false,
+                                    err: {
+                                        message: 'No existe plan para esta moto'
+                                    }
+                                });
+                            }
+
+                            zynchPackDB.forEach(formatoFecha);
+                            let objetoZynchPack = Object.assign({ predetermined: true }, zynchPackDB);
+                            objetoZynchPack = objetoZynchPack[0];
+
+                            res.json({
+                                ok: true,
+                                user: {
+                                    name: usuarioDB.nombre,
+                                    email: usuarioDB.email,
+                                    role: usuarioDB.role
+                                },
+                                zynch: objetoZynchPack,
+                                token
+                            });
                         });
                     });
                 });
@@ -127,20 +148,40 @@ app.get('/login', [verificaCliente], (req, res) => {
                         })
                     }
 
-                    // zynchDB.forEach(formatoFecha);
-
                     let objetoZynch = Object.assign({}, zynchDB);
                     objetoZynch = objetoZynch[0];
 
-                    res.json({
-                        ok: true,
-                        user: {
-                            name: usuarioDB.nombre,
-                            email: usuarioDB.email,
-                            role: usuarioDB.role
-                        },
-                        zynch: objetoZynch,
-                        token
+                    ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                err
+                            });
+                        }
+
+                        if (!zynchPackDB) {
+                            return res.status(400).json({
+                                ok: false,
+                                err: {
+                                    message: 'No existe plan para esta moto'
+                                }
+                            });
+                        }
+
+                        zynchPackDB.forEach(formatoFecha);
+                        let objetoZynchPack = Object.assign({ predetermined: true }, zynchPackDB);
+                        objetoZynchPack = objetoZynchPack[0];
+
+                        res.json({
+                            ok: true,
+                            user: {
+                                name: usuarioDB.nombre,
+                                email: usuarioDB.email,
+                                role: usuarioDB.role
+                            },
+                            zynch: objetoZynchPack,
+                            token
+                        });
                     });
                 });
             }
