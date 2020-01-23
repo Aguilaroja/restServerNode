@@ -75,6 +75,7 @@ app.get('/:action', [verificaCliente], (req, res) => {
                         }
 
                         // Crea esquema de centro de carga con datos de la respuesta de Noodoe
+                        // Debe ser esquema de ChargerCenter para que no haya conflictos de lectura
                         let esquema = new ChargerCenter({
                             address: 'No address',
                             name_center: 'Demo',
