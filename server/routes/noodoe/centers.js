@@ -12,6 +12,7 @@ app.get('/:action', [verificaCliente], (req, res) => {
     let lon1 = req.query.lon;
     let arrayCenter = [];
     let idArray = [];
+    let distancias = [];
     let resOrdenada = [];
 
     // En caso que no se reciban coordenadas, le asigna una por default
@@ -67,39 +68,32 @@ app.get('/:action', [verificaCliente], (req, res) => {
                 return a.distancia - b.distancia;
             });
 
+            // return res.json({
+            //     arrayCenter
+            // });
+
             // Genera un array con los ids ordenados de los centros de carga
             for (let i = 0; i < arrayCenter.length; i++) {
                 const element = arrayCenter[i];
                 idArray.push(element.id);
+                distancias.push(element.distancia);
             }
 
-            // Consulta los centros de carga con los ids ordenados
-            ChargerCenter.find({ _id: idArray }, (err, centersDB) => {
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        err
-                    });
-                }
+            // Hace match del array ordenado de ids con el array de resultados de la base de datos
+            idArray.forEach(val => {
+                resOrdenada.push(chargerCenterDB.find(element => element._id.toString() == val));
+            });
 
-                if (!centersDB) {
-                    return res.status(400).json({
-                        ok: false,
-                        err: {
-                            message: 'No hay respuesta'
-                        }
-                    });
-                }
+            // Agrega propiedad de distancia para cada centro de carga
+            for (let i = 0; i < resOrdenada.length; i++) {
+                const element = resOrdenada[i];
+                resOrdenada[i] = JSON.parse(JSON.stringify(element));
+                resOrdenada[i].distancia = distancias[i];
+            }
 
-                // Hace match del array ordenado de ids con el array de resultados de la base de datos
-                idArray.forEach(val => {
-                    resOrdenada.push(centersDB.find(element => element._id.toString() == val));
-                });
-
-                res.json({
-                    ok: true,
-                    chargerCenter: resOrdenada
-                })
+            res.json({
+                ok: true,
+                chargerCenter: resOrdenada
             });
         });
 
@@ -134,35 +128,24 @@ app.get('/:action', [verificaCliente], (req, res) => {
             for (let i = 0; i < arrayCenter.length; i++) {
                 const element = arrayCenter[i];
                 idArray.push(element.id);
+                distancias.push(element.distancia);
             }
 
-            // Consulta los centros de carga con los ids ordenados
-            ServiceCenter.find({ _id: idArray }, (err, centersDB) => {
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        err
-                    });
-                }
+            // Hace match del array ordenado de ids con el array de resultados de la base de datos
+            idArray.forEach(val => {
+                resOrdenada.push(serviceCenterDB.find(element => element._id.toString() == val));
+            });
 
-                if (!centersDB) {
-                    return res.status(400).json({
-                        ok: false,
-                        err: {
-                            message: 'No hay respuesta'
-                        }
-                    });
-                }
+            // Agrega propiedad de distancia para cada centro de carga
+            for (let i = 0; i < resOrdenada.length; i++) {
+                const element = resOrdenada[i];
+                resOrdenada[i] = JSON.parse(JSON.stringify(element));
+                resOrdenada[i].distancia = distancias[i];
+            }
 
-                // Hace match del array ordenado de ids con el array de resultados de la base de datos
-                idArray.forEach(val => {
-                    resOrdenada.push(centersDB.find(element => element._id.toString() == val));
-                });
-
-                res.json({
-                    ok: true,
-                    serviceCenter: resOrdenada
-                })
+            res.json({
+                ok: true,
+                serviceCenter: resOrdenada
             });
         });
     }
