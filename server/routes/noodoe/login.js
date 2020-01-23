@@ -114,7 +114,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                             }
 
                             zynchPackDB.forEach(formatoFecha);
-                            let objetoZynchPack = Object.assign({ predetermined: true }, zynchPackDB);
+                            let objetoZynchPack = Object.assign({}, zynchPackDB);
                             objetoZynchPack = objetoZynchPack[0];
 
                             res.json({
@@ -130,7 +130,9 @@ app.get('/login', [verificaCliente], (req, res) => {
                         });
                     });
                 });
+
             } else {
+
                 ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
                     if (err) {
                         return res.status(500).json({
@@ -169,8 +171,10 @@ app.get('/login', [verificaCliente], (req, res) => {
                         }
 
                         zynchPackDB.forEach(formatoFecha);
-                        let objetoZynchPack = Object.assign({ predetermined: true }, zynchPackDB);
-                        objetoZynchPack = objetoZynchPack[0];
+
+                        let objetoZynchPack = zynchPackDB[0];
+                        var ob = JSON.parse(JSON.stringify(objetoZynchPack));
+                        ob.name_zynch = objetoZynch.name_zynch;
 
                         res.json({
                             ok: true,
@@ -179,7 +183,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                                 email: usuarioDB.email,
                                 role: usuarioDB.role
                             },
-                            zynch: objetoZynchPack,
+                            zynch: ob,
                             token
                         });
                     });
