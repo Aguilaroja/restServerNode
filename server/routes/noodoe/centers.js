@@ -89,7 +89,8 @@ app.get('/:action', [verificaCliente], (req, res) => {
                             service_today_open: '00:00',
                             service_today_close: '00:00',
                             latitude: response.data.cabinet.lat,
-                            longitude: response.data.cabinet.lon
+                            longitude: response.data.cabinet.lon,
+                            __v: 0
                         });
 
                         // Agrega el esquema como objeto al array de la consulta a la BD
