@@ -93,8 +93,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                             })
                         }
 
-                        let objetoZynch = Object.assign({}, zynchDB);
-                        objetoZynch = objetoZynch[0];
+                        let objetoZynch = zynchDB[0];
 
                         ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
                             if (err) {
@@ -114,8 +113,10 @@ app.get('/login', [verificaCliente], (req, res) => {
                             }
 
                             zynchPackDB.forEach(formatoFecha);
-                            let objetoZynchPack = Object.assign({}, zynchPackDB);
-                            objetoZynchPack = objetoZynchPack[0];
+
+                            let objetoZynchPack = zynchPackDB[0];
+                            var ob = JSON.parse(JSON.stringify(objetoZynchPack));
+                            ob.name_zynch = objetoZynch.name_zynch;
 
                             res.json({
                                 ok: true,
@@ -150,8 +151,7 @@ app.get('/login', [verificaCliente], (req, res) => {
                         })
                     }
 
-                    let objetoZynch = Object.assign({}, zynchDB);
-                    objetoZynch = objetoZynch[0];
+                    let objetoZynch = zynchDB[0];
 
                     ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
                         if (err) {
