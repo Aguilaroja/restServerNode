@@ -2,6 +2,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const app = express();
+const axios = require('axios');
 const ChargerCenter = require('../../models/charger_center'); //Ésto es un objeto para el Schema
 const ServiceCenter = require('../../models/service_center'); //Ésto es un objeto para el Schema
 const { verificaCliente } = require('../../middlewares/autenticacion');
@@ -31,8 +32,7 @@ app.get('/:action', [verificaCliente], (req, res) => {
         let r = 6371;
         let dLat = (element.latitude - lat1) * (Math.PI / 180);
         let dLon = (element.longitude - lon1) * (Math.PI / 180);
-        let a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(lat1 * (Math.PI / 180)) * (element.latitude * (Math.PI / 180)) *
             Math.sin(dLat / 2) * Math.sin(dLat / 2);
         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
@@ -43,59 +43,99 @@ app.get('/:action', [verificaCliente], (req, res) => {
 
     if (action === 'getChargerCenter') {
 
-        ChargerCenter.find({}, (err, chargerCenterDB) => {
-            if (err) {
-                return res.status(500).json({
-                    ok: false,
-                    err
-                });
-            }
+        let ownerId = '3281AAGD7900TW0314';
+        let ownerType = 'cabinet';
 
-            if (!chargerCenterDB) {
-                return res.status(400).json({
-                    ok: false,
-                    err: {
-                        message: 'No se encontraron centros de carga'
+        const info = async(ownerId, ownerType) => {
+            const respuesta = await axios({
+                    method: 'POST',
+                    url: `https://iusa-dev.server.noodoe.com/getOwnerInfo`,
+                    data: {
+                        ownerId: ownerId,
+                        ownerType: ownerType
                     }
+                })
+                .then(response => {
+                    // console.log(response.data);
+                    ChargerCenter.find({}, (err, chargerCenterDB) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                err
+                            });
+                        }
+
+                        if (!chargerCenterDB) {
+                            return res.status(400).json({
+                                ok: false,
+                                err: {
+                                    message: 'No se encontraron centros de carga'
+                                }
+                            });
+                        }
+
+                        // Crea esquema de centro de carga con datos de la respuesta de Noodoe
+                        let esquema = new ChargerCenter({
+                            address: 'No address',
+                            name_center: 'Demo',
+                            swaps_low: 0,
+                            swaps_medium: 0,
+                            swaps_full: 0,
+                            total_swaps_available: 0,
+                            schedule_mf: '00:00 - 00:00',
+                            schedule_sa: '00:00 - 00:00',
+                            schedule_su: '00:00 - 00:00',
+                            service_today_open: '00:00',
+                            service_today_close: '00:00',
+                            latitude: response.data.cabinet.lat,
+                            longitude: response.data.cabinet.lon
+                        });
+
+                        // Agrega el esquema como objeto al array de la consulta a la BD
+                        chargerCenterDB.push(esquema);
+
+                        // Consulta distancias entre las coordenadas recibidas por GET y las coordenadas establecidas en los centros de carga
+                        chargerCenterDB.forEach(consultaDistancia);
+
+                        // Ordenación ascendente por distancia de los centros de carga
+                        arrayCenter.sort(function(a, b) {
+                            return a.distancia - b.distancia;
+                        });
+
+                        // Genera dos array con los ids ordenados de los centros de carga
+                        for (let i = 0; i < arrayCenter.length; i++) {
+                            const element = arrayCenter[i];
+                            idArray.push(element.id);
+                            distancias.push(element.distancia);
+                        }
+
+                        // Hace match del array ordenado de ids con el array de resultados de la base de datos
+                        idArray.forEach(val => {
+                            resOrdenada.push(chargerCenterDB.find(element => element._id.toString() == val));
+                        });
+
+                        // Agrega propiedad de distancia para cada centro de carga
+                        for (let i = 0; i < resOrdenada.length; i++) {
+                            const element = resOrdenada[i];
+                            resOrdenada[i] = JSON.parse(JSON.stringify(element));
+                            resOrdenada[i].distancia = distancias[i];
+                        }
+
+                        res.json({
+                            ok: true,
+                            chargerCenter: resOrdenada
+                        });
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    return err;
                 });
-            }
 
-            // Consulta distancias entre las coordenadas recibidas por GET y las coordenadas establecidas en los centros de carga
-            chargerCenterDB.forEach(consultaDistancia);
+            return respuesta;
+        };
 
-            // Ordenación ascendente por distancia de los centros de carga
-            arrayCenter.sort(function(a, b) {
-                return a.distancia - b.distancia;
-            });
-
-            // return res.json({
-            //     arrayCenter
-            // });
-
-            // Genera un array con los ids ordenados de los centros de carga
-            for (let i = 0; i < arrayCenter.length; i++) {
-                const element = arrayCenter[i];
-                idArray.push(element.id);
-                distancias.push(element.distancia);
-            }
-
-            // Hace match del array ordenado de ids con el array de resultados de la base de datos
-            idArray.forEach(val => {
-                resOrdenada.push(chargerCenterDB.find(element => element._id.toString() == val));
-            });
-
-            // Agrega propiedad de distancia para cada centro de carga
-            for (let i = 0; i < resOrdenada.length; i++) {
-                const element = resOrdenada[i];
-                resOrdenada[i] = JSON.parse(JSON.stringify(element));
-                resOrdenada[i].distancia = distancias[i];
-            }
-
-            res.json({
-                ok: true,
-                chargerCenter: resOrdenada
-            });
-        });
+        info(ownerId, ownerType);
 
     } else if (action === 'getServiceCenter') {
 
@@ -116,15 +156,15 @@ app.get('/:action', [verificaCliente], (req, res) => {
                 });
             }
 
-            // Consulta distancias entre las coordenadas recibidas por GET y las coordenadas establecidas en los centros de carga
+            // Consulta distancias entre las coordenadas recibidas por GET y las coordenadas establecidas en los centros de servicio
             serviceCenterDB.forEach(consultaDistancia);
 
-            // Ordenación ascendente por distancia de los centros de carga
+            // Ordenación ascendente por distancia de los centros de servicio
             arrayCenter.sort(function(a, b) {
                 return a.distancia - b.distancia;
             });
 
-            // Genera un array con los ids ordenados de los centros de carga
+            // Genera dos array con los ids ordenados de los centros de servicio
             for (let i = 0; i < arrayCenter.length; i++) {
                 const element = arrayCenter[i];
                 idArray.push(element.id);
@@ -136,7 +176,7 @@ app.get('/:action', [verificaCliente], (req, res) => {
                 resOrdenada.push(serviceCenterDB.find(element => element._id.toString() == val));
             });
 
-            // Agrega propiedad de distancia para cada centro de carga
+            // Agrega propiedad de distancia para cada centro de servicio
             for (let i = 0; i < resOrdenada.length; i++) {
                 const element = resOrdenada[i];
                 resOrdenada[i] = JSON.parse(JSON.stringify(element));
