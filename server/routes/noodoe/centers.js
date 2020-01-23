@@ -90,7 +90,7 @@ app.get('/:action', [verificaCliente], (req, res) => {
                             service_today_close: '00:00',
                             latitude: response.data.cabinet.lat,
                             longitude: response.data.cabinet.lon,
-                            __v: 0
+                            __v: 0 // Este dato se genera sólo aquí, el esquema en Mongo lo crea automáticamente 
                         });
 
                         // Agrega el esquema como objeto al array de la consulta a la BD

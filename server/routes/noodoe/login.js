@@ -60,15 +60,9 @@ app.get('/login', [verificaCliente], (req, res) => {
                 });
             }
 
-            if (!tokenIpDB) {
+            if (tokenIpDB) {
 
-                let tokenLogin = new TokenLogin({
-                    email: usuarioDB.email,
-                    tokenLog: token,
-                    ip_address: ip
-                });
-
-                tokenLogin.save((err, tokenLoginDB) => {
+                ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
                     if (err) {
                         return res.status(500).json({
                             ok: false,
@@ -76,61 +70,135 @@ app.get('/login', [verificaCliente], (req, res) => {
                         })
                     }
 
-                    ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
+                    if (!zynchDB) {
+                        return res.status(400).json({
+                            ok: false,
+                            err: {
+                                message: 'Email incorrecto'
+                            }
+                        })
+                    }
+
+                    let objetoZynch = zynchDB[0];
+
+                    ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
                         if (err) {
                             return res.status(500).json({
                                 ok: false,
                                 err
-                            })
+                            });
                         }
 
-                        if (!zynchDB) {
+                        if (!zynchPackDB) {
                             return res.status(400).json({
                                 ok: false,
                                 err: {
-                                    message: 'Email incorrecto'
+                                    message: 'No existe plan para esta moto'
                                 }
-                            })
+                            });
                         }
 
-                        let objetoZynch = zynchDB[0];
+                        zynchPackDB.forEach(formatoFecha);
 
-                        ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
-                            if (err) {
-                                return res.status(500).json({
-                                    ok: false,
-                                    err
-                                });
-                            }
+                        let objetoZynchPack = zynchPackDB[0];
+                        var ob = JSON.parse(JSON.stringify(objetoZynchPack));
+                        ob.name_zynch = objetoZynch.name_zynch;
 
-                            if (!zynchPackDB) {
-                                return res.status(400).json({
-                                    ok: false,
-                                    err: {
-                                        message: 'No existe plan para esta moto'
-                                    }
-                                });
-                            }
+                        console.log(objetoZynch)
 
-                            zynchPackDB.forEach(formatoFecha);
-
-                            let objetoZynchPack = zynchPackDB[0];
-                            var ob = JSON.parse(JSON.stringify(objetoZynchPack));
-                            ob.name_zynch = objetoZynch.name_zynch;
-
-                            res.json({
-                                ok: true,
-                                user: {
-                                    name: usuarioDB.nombre,
-                                    email: usuarioDB.email,
-                                    role: usuarioDB.role
-                                },
-                                zynch: objetoZynchPack,
-                                token
-                            });
+                        res.json({
+                            ok: true,
+                            user: {
+                                name: usuarioDB.nombre,
+                                email: usuarioDB.email,
+                                role: usuarioDB.role
+                            },
+                            zynch: ob,
+                            token
                         });
                     });
                 });
+
+                // let tokenLogin = new TokenLogin({
+                //     email: usuarioDB.email,
+                //     tokenLog: token,
+                //     ip_address: ip
+                // });
+
+                // tokenLogin.save((err, tokenLoginDB) => {
+                //     if (err) {
+                //         return res.status(500).json({
+                //             ok: false,
+                //             err
+                //         })
+                //     }
+
+                //     if (!tokenLoginDB) {
+                //         return res.status(500).json({
+                //             ok: false,
+                //             err: {
+                //                 message: 'No se hizo el registro del token'
+                //             }
+                //         });
+                //     }
+
+                //     ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
+                //         if (err) {
+                //             return res.status(500).json({
+                //                 ok: false,
+                //                 err
+                //             })
+                //         }
+
+                //         if (!zynchDB) {
+                //             return res.status(400).json({
+                //                 ok: false,
+                //                 err: {
+                //                     message: 'Email incorrecto'
+                //                 }
+                //             })
+                //         }
+
+                //         let objetoZynch = zynchDB[0];
+
+                //         ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
+                //             if (err) {
+                //                 return res.status(500).json({
+                //                     ok: false,
+                //                     err
+                //                 });
+                //             }
+
+                //             if (!zynchPackDB) {
+                //                 return res.status(400).json({
+                //                     ok: false,
+                //                     err: {
+                //                         message: 'No existe plan para esta moto'
+                //                     }
+                //                 });
+                //             }
+
+                //             zynchPackDB.forEach(formatoFecha);
+
+                //             let objetoZynchPack = zynchPackDB[0];
+                //             var ob = JSON.parse(JSON.stringify(objetoZynchPack));
+                //             ob.name_zynch = objetoZynch.name_zynch;
+
+                //             console.log(objetoZynch)
+
+                //             res.json({
+                //                 ok: true,
+                //                 user: {
+                //                     name: usuarioDB.nombre,
+                //                     email: usuarioDB.email,
+                //                     role: usuarioDB.role
+                //                 },
+                //                 zynch: objetoZynchPack,
+                //                 token
+                //             });
+                //         });
+                //     });
+                // });
 
             } else {
 
@@ -175,6 +243,8 @@ app.get('/login', [verificaCliente], (req, res) => {
                         let objetoZynchPack = zynchPackDB[0];
                         var ob = JSON.parse(JSON.stringify(objetoZynchPack));
                         ob.name_zynch = objetoZynch.name_zynch;
+
+                        console.log(objetoZynch)
 
                         res.json({
                             ok: true,
