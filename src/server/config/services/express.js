@@ -2,7 +2,6 @@ const config = require('./config');
 
 //Marco de servidor
 const express = require('express');
-const routes = require('../../../routes');
 const hbs = require('hbs');
 const path = require('path');
 const bodyParser = require('body-parser'); //Da formato JSON a las respuestas
@@ -26,12 +25,12 @@ const init = () => {
   app.use(cors(corsOptions));
   app.use('/api/', apiLimiter);
   //Sirve para mostrar una página HTML
-  app.use(express.static(config.frontendStaticFolder));
+  app.use(express.static(path.join(config.frontendStaticFolder, '../../public')));
   //Para especificar en la URL un archivo diferente, en la URL se debe escribir con todo y extensión del archivo
 
   //Express HBS (Handlebars) engine
-  hbs.registerPartials(__dirname + '/views/partials'); //Las carpetas deben estar escritas en inglés
-  app.set('views', path.join(__dirname, 'views'));
+  hbs.registerPartials(path.join(config.frontendStaticFolder, '/partials')); //Las carpetas deben estar escritas en inglés
+  app.set('views', config.frontendStaticFolder);
   app.set('view engine', 'hbs');
 
   app.use(
