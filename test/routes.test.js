@@ -17,6 +17,17 @@ var response = {
   render: function(view, viewData) {
     this.viewName = view;
     this.data = viewData;
+  },
+  status: function(code) {
+    var obj = {
+      setCode(code) {
+        return code;
+      },
+      json(json_obj) {
+        return json_obj;
+      }
+    };
+    return obj;
   }
 };
 
