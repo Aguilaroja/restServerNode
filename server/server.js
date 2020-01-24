@@ -1,41 +1,36 @@
-//Requiere de config para saber el puerto por donde entrarás las peticiones
-require('./config/config');
+'use strict';
 
-// const funciones = require('../noodoe/apiNoodoe');
-
-//Marco de servidor
-const express = require('express');
+const { config, express, database, log, stats } = require('./config');
+const routes = require('../routes');
 const mongoose = require('mongoose');
-const app = express();
-const hbs = require('hbs');
-const path = require('path');
+const http = require('http');
+let server = null;
 
-//Sirve para mostrar una página HTML
-app.use(express.static(__dirname + '/public'));
-//Para especificar en la URL un archivo diferente, en la URL se debe escribir con todo y extensión del archivo
+/**
+ * Start HTTP/2 server, database
+ * Load routes, services, check memory usage
+ * @function
+ */
+const listen = () => {
+  const app = express.init();
+  database.init();
+  server = http.createServer(app).listen(config.port);
+  routes.init(app);
+  stats.memory();
+  log.info(`Escuchando en http://${config.host}:${config.port}`);
+};
 
-//Express HBS (Handlebars) engine
-hbs.registerPartials(__dirname + '/views/partials'); //Las carpetas deben estar escritas en inglés
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'hbs');
+/**
+ * Close server, database connection
+ * @function
+ */
+const close = () => {
+  server.close();
+  mongoose.disconnect();
+  log.info('Server is offline. Bye!');
+};
 
-//Da formato JSON a las respuestas
-const bodyParser = require('body-parser');
-
-//parse application/x-www-form-urlenconded
-app.use(bodyParser.urlencoded({ extended: false }));
-
-//parse application/json
-app.use(bodyParser.json());
-
-app.use(require('./routes/index'));
-
-app.listen(process.env.PORT, () => {
-    console.log(`Escuchando el puerto ${process.env.PORT}`);
-});
-
-mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false },
-    (err, res) => {
-        if (err) throw err;
-        console.log('Base de datos online')
-    });
+module.exports = {
+  listen,
+  close
+};
