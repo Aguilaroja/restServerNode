@@ -6,8 +6,9 @@
   "scripts": {
     "start": "export NODE=ENV=development && npm run dev",
     "test": "export NODE_ENV=test && mocha --exit --reporter spec",
-    "dev": "export NODE_ENV=development && nodemon index.js  --exec \"npm run test && node\"",
-    "production": "export NODE_ENV=production && nodemon index.js"
+    "dev": "export NODE_ENV=development && nodemon --watch public --watch src/views index.js  --exec \"npm run test &&  npm run compile:sass && node\"",
+    "production": "export NODE_ENV=production && nodemon index.js",
+    "compile:sass": "node-sass public/scss/main.scss public/assets/css/styles.css"
   },
   "author": "SpaceBar",
   "license": "SEE LICENSE IN LICENSE",
@@ -27,6 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.7",
     "mongoose-unique-validator": "^2.0.3",
+    "node-sass": "^4.13.1",
     "nodemailer": "^6.4.2",
     "request": "^2.88.0",
     "underscore": "^1.9.2",

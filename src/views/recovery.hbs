@@ -14,51 +14,41 @@
         {{> navbar}}
 
         {{!-- <div class="jumbotron"> --}}
-            {{!-- <form method="POST"
-                action="https://restservernode-ar.herokuapp.com/updatepass">
-                --}}
-                {{!-- <form method="POST" action="/user/updatepass"> --}}
-                    <div class="centrado">
-                        <div class="form-group">
-                            <label for="">{{nombre}}</label>
-                        </div>
-                        {{!-- <div class="form-row"> --}}
-                            <div class="form-group">
-                                <label for="password_one">Password new</label>
-                                <input type="password" class="form-control"
-                                    id="password_one" name="password_one"
-                                    placeholder="Password new">
-                            </div>
-                            {{!-- </div> --}}
-                        {{!-- <div class="form-row"> --}}
-                            <div class="form-group">
-                                <label for="password_two">Password confirm</label>
-                                <input type="password" class="form-control"
-                                    id="password_two" name="password_two"
-                                    placeholder="Password confirm"
-                                    aria-describedby="error">
-                                <small id="error" class="form-text text-muted"></small>
-                            </div>
-                            {{!-- </div> --}}
-                        {{!-- <div class="form-row"> --}}
-                            <button type="button" id="btnactualizapass"
-                                class="btn btn-primary">Actualizar contraseña</button>
-                            <input type="hidden" id="token" name="token"
-                                value="{{token}}">
-                            {{!-- </div> --}}
+            {{!-- <form method="POST" action="/user/updatepass"> --}}
+                <div class="centrado">
+                    <div class="form-group">
+                        <label for="">{{nombre}}</label>
                     </div>
-                    {{!-- </form> --}}
-                {{!-- </div> --}}
+                    {{!-- <div class="form-row"> --}}
+                        <div class="form-group">
+                            <label for="password_one">Password new</label>
+                            <input type="password" class="form-control"
+                                id="password_one" name="password_one"
+                                placeholder="Password new">
+                        </div>
+                        {{!-- </div> --}}
+                    {{!-- <div class="form-row"> --}}
+                        <div class="form-group">
+                            <label for="password_two">Password confirm</label>
+                            <input type="password" class="form-control"
+                                id="password_two" name="password_two"
+                                placeholder="Password confirm"
+                                aria-describedby="error">
+                            <small id="error" class="form-text text-muted"></small>
+                        </div>
+                        {{!-- </div> --}}
+                    {{!-- <div class="form-row"> --}}
+                        <button type="button" id="btnactualizapass"
+                            class="btn btn-primary">Actualizar contraseña</button>
+                        <input type="hidden" id="token" name="token"
+                            value="{{token}}">
+                        {{!-- </div> --}}
+                </div>
+                {{!-- </form> --}}
+            {{!-- </div> --}}
 
-            {{> footer }}
+        {{> footer }}
+        <script src="assets/js/recovery.js"></script>
+    </body>
 
-            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-            <script
-                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-                crossorigin="anonymous"></script>
-            <script src="assets/js/bootstrap.min.js"></script>
-            <script src="assets/js/recovery.js"></script>
-        </body>
-
-    </html>
+</html>
