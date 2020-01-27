@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "export NODE=ENV=development && npm run production",
+        "start": "export NODE=ENV=production && npm run production",
         "test": "export NODE_ENV=test && mocha --exit --reporter spec",
         "dev": "export NODE_ENV=development && nodemon index.js  --exec \"npm run test && node\"",
         "production": "export NODE_ENV=production && nodemon index.js"
