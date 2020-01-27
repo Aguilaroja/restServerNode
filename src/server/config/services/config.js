@@ -21,9 +21,7 @@ const development = {
   port: process.env.PORT,
   url: `http://${process.env.HOST}:${process.env.PORT}`,
   redisUrl: process.env.REDIS_URL,
-  mongoUrl: `mongodb+srv://${process.env.MONGODB_USER}:${encodeURIComponent(
-    process.env.MONGODB_PASS
-  )}@${process.env.MONGODB_HOST}`,
+  mongoUrl: `mongodb://${process.env.MONGODB_HOST}`,
   seed: process.env.SEED,
   frontendStaticFolder: path.join(basePath + 'src/views')
 };
