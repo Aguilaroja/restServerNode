@@ -6,12 +6,14 @@ let views = {};
  * Render index page
  */
 views.index = (req, res) => {
-  if (process.env.NODE_ENV === 'production') {
-    res.render('index');
-  } else {
-    res.render('index');
-    //res.json('Server ready');
-  }
+  res.render('index', { anio: new Date().getFullYear() });
+};
+
+/**
+ * Render login page
+ */
+views.login = (req, res) => {
+  res.render('login', { anio: new Date().getFullYear() });
 };
 
 /**
