@@ -6,9 +6,9 @@
   "scripts": {
     "start": "export NODE=ENV=development && npm run dev",
     "test": "export NODE_ENV=test && mocha --exit --reporter spec",
-    "dev": "export NODE_ENV=development && nodemon --watch public --watch src/views index.js  --exec \"npm run test &&  npm run compile:sass && node\"",
+    "dev": "export NODE_ENV=development && nodemon index.js  --exec \"npm run test && npm run compile:sass && node\"",
     "production": "export NODE_ENV=production && nodemon index.js",
-    "compile:sass": "node-sass public/scss/main.scss public/assets/css/styles.css"
+    "compile:sass": "node-sass src/styles/main.scss public/assets/css/styles.css"
   },
   "author": "SpaceBar",
   "license": "SEE LICENSE IN LICENSE",
