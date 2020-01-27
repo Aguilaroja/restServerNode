@@ -12,12 +12,12 @@ let server = null;
  * @function
  */
 const listen = () => {
-  const app = express.init();
-  database.init();
-  server = http.createServer(app).listen(config.port);
-  routes.init(app);
-  stats.memory();
-  log.info(`Escuchando en http://${config.host}:${config.port}`);
+    const app = express.init();
+    database.init();
+    server = http.createServer(app).listen(config.port);
+    routes.init(app);
+    stats.memory();
+    log.info(`Escuchando en http://${config.host}`);
 };
 
 /**
@@ -25,12 +25,12 @@ const listen = () => {
  * @function
  */
 const close = () => {
-  server.close();
-  mongoose.disconnect();
-  log.info('Server is offline. Bye!');
+    server.close();
+    mongoose.disconnect();
+    log.info('Server is offline. Bye!');
 };
 
 module.exports = {
-  listen,
-  close
+    listen,
+    close
 };

@@ -30,7 +30,7 @@ const production = {
     env,
     host: process.env.HOST,
     port: process.env.PORT,
-    url: `http://${process.env.HOST}:${process.env.PORT}`,
+    url: `http://${process.env.HOST}`,
     redisUrl: process.env.REDIS_URL,
     mongoUrl: `mongodb+srv://${process.env.MONGODB_USER}:${encodeURIComponent(
     process.env.MONGODB_PASS

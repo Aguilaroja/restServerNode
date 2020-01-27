@@ -4,10 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "export NODE=ENV=production && npm run production",
+        "start": "npm run production",
         "test": "export NODE_ENV=test && mocha --exit --reporter spec",
         "dev": "export NODE_ENV=development && nodemon index.js  --exec \"npm run test && node\"",
-        "production": "export NODE_ENV=production && nodemon index.js"
+        "production": "export NODE_ENV=production && node index.js"
     },
     "author": "SpaceBar",
     "license": "SEE LICENSE IN LICENSE",
