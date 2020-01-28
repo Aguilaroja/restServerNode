@@ -8,12 +8,12 @@ const userRoute = require('./user');
  * Initialize routes
  */
 const init = app => {
-  app.use('/', viewRoute);
-  app.use('/', userRoute);
-  app.use('/api', apiRoute);
-  app.use('*', errorRoute);
+    app.use('/', viewRoute);
+    app.use('/', userRoute);
+    app.use('/api', apiRoute);
+    app.use('*', errorRoute);
 };
 
 module.exports = {
-  init
+    init
 };
