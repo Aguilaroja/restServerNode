@@ -1,8 +1,9 @@
-$('#btnactualizapass').click(function() {
+$('#btnlogin').click(function() {
   let email = $('#username').val();
   let password = $('#password').val();
   $.ajax({
-    type: 'POST',
+    type: 'GET',
+    contentType: 'application/x-www-form-urlencoded',
     url: '/user/login',
     data: {
       email,
