@@ -1,12 +1,11 @@
 const QRCode = require('qrcode');
 const { createCanvas, loadImage } = require('canvas');
+const path = require('path');
 const { log } = require('../../server/config');
 const qrCodeModel = require('../../server/models/qr_code'); //Ésto es un objeto para el Schema
 const ZynchMoto = require('../../server/models/zynch_moto');
 const ZynchPack = require('../../server/models/zynch_pack');
 const Usuario = require('../../server/models/usuario');
-const { config } = require('../../server/config/');
-const path = require('path');
 
 const getQrCode = async (req, res) => {
   // Verificar que la solicitud esté formada correctamente
@@ -92,7 +91,7 @@ const getQrCode = async (req, res) => {
  * @param width
  * @param cWidth
  */
-async function createQrCode(dataForQrCode, width, callback) {
+const createQrCode = async (dataForQrCode, width, callback) => {
   try {
     width = Number(width);
     const cWidth = width * 0.25;
@@ -120,6 +119,6 @@ async function createQrCode(dataForQrCode, width, callback) {
   } catch (err) {
     callback(err.message, null);
   }
-}
+};
 
 module.exports = getQrCode;

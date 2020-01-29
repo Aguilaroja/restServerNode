@@ -59,4 +59,10 @@ describe('Views', function() {
       expect(response.viewName).to.equal('recovery');
     });
   });
+  describe('QR Code Route', function() {
+    it('should provide a title and the qr view name', function() {
+      viewRoute.qr(request, response);
+      expect(response.viewName).to.equal('qrcode');
+    });
+  });
 });

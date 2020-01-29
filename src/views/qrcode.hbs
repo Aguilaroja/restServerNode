@@ -1,0 +1,86 @@
+ <!DOCTYPE html>
+<html lang="es">
+  {{> head }}
+  <style>
+      .container {
+        width:100%;
+        height:100%;
+        margin: 24px;
+        margin-bottom:55px;
+        padding:16px;
+      }
+
+      .center {
+        margin: auto;
+        margin-top: 16px;
+      }
+      .qrImg {
+        display: block;
+        border: #343434 1px solid;
+        margin-left: auto;
+        margin-right: auto;
+        height: 100%;
+      }
+      .input-group {
+        margin: auto;
+      }
+    </style>
+  <body>
+    {{> navbar}}
+    <div class="container">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">VCU</span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="L33TH4X0RP4WNZn00bZ"
+          aria-label="VCU"
+          aria-describedby="basic-addon1"
+          id="inputVCU"
+          />
+        <div class="input-group-append">
+          <button type="button" id="btnGet" class="btn
+            btn-outline-primary">
+            Get QR!
+          </button>
+        </div>
+      </div>
+
+      <div class="center">
+        <img id="qrImg" alt="QR" src="/assets/img/qrCenter.svg" />
+        <div class="center" id="log"></div>
+      </div>
+    </div>
+
+    <footer>
+      Zynch - {{anio}}
+    </footer>
+    <script type="text/javascript">
+      $(function() {
+        $('#btnGet').click(function() {
+          $.ajax({
+            url: 'http://localhost:3000/user/getQrCode',
+            method: 'POST',
+            data: {
+              vcu: $('#inputVCU').val() ? $('#inputVCU').val() : $('#inputVCU').attr('placeholder'),
+              width: $('#qrImg').width()
+            },
+            success: function(response) {
+              if (response.ok == true) {
+                $('#qrImg').attr('src', response.image);
+                $('#log').text(null);
+              } else {
+                $('#qrImg').attr('src', '');
+                $('#log').text(JSON.stringify(response));
+              }
+            }
+          });
+        });
+      });
+    </script>
+    {{> footer }}
+  </body>
+
+</html>
