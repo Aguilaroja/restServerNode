@@ -6,7 +6,7 @@
   "scripts": {
     "start": "export NODE=ENV=development && npm run dev",
     "test": "export NODE_ENV=test && mocha --exit --reporter spec",
-    "dev": "export NODE_ENV=development && nodemon index.js  --exec \"npm run test && npm run compile:sass && node\"",
+    "dev": "export NODE_ENV=development && nodemon index.js  --exec \"npm run test && node\"",
     "production": "export NODE_ENV=production && nodemon index.js",
     "compile:sass": "node-sass src/styles/main.scss public/assets/css/styles.css"
   },
@@ -30,8 +30,10 @@
     "mongoose-unique-validator": "^2.0.3",
     "node-sass": "^4.13.1",
     "nodemailer": "^6.4.2",
+    "qrcode": "^1.4.4",
     "request": "^2.88.0",
     "underscore": "^1.9.2",
+    "uuid": "^3.4.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
