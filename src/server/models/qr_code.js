@@ -7,7 +7,7 @@ let qrCodeSchema = new Schema({
   user_id: {
     type: String,
     unique: false,
-    required: false
+    required: true
   },
   user_email: {
     type: String,
@@ -16,11 +16,12 @@ let qrCodeSchema = new Schema({
   },
   vcu: {
     type: String,
-    unique: true,
+    unique: false,
     required: true
   },
   base64Image: {
     type: String,
+    unique: false,
     required: true
   },
   swapsAvailable: {
@@ -36,7 +37,7 @@ let qrCodeSchema = new Schema({
   dateGenerated: {
     type: Date,
     default: null,
-    required: false
+    required: new Date()
   },
   expiryDate: {
     type: Date,
@@ -45,7 +46,7 @@ let qrCodeSchema = new Schema({
   }
 });
 
-//Mediante ésta método se modifica el objeto de respuesta del Schema, aquí se omite el dato password
+//Mediante ésta método se modifica el objeto de respuesta del Schema
 qrCodeSchema.methods.toJSON = function() {
   let qr = this;
   let qrObject = user.toObject();
