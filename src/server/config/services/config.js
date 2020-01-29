@@ -37,7 +37,8 @@ const production = {
     process.env.MONGODB_PASS
   )}@${process.env.MONGODB_HOST}`,
   seed: process.env.SEED,
-  frontendStaticFolder: path.join(basePath + '/src/views')
+  frontendStaticFolder: path.join(basePath + '/src/views'),
+  caducidadToken: parseInt(60 * 60 * 24 * 30)
 };
 
 const test = {
