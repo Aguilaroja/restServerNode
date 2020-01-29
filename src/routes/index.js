@@ -9,7 +9,7 @@ const userRoute = require('./user');
  */
 const init = app => {
     app.use('/', viewRoute);
-    app.use('/', userRoute);
+    app.use('/user', userRoute);
     app.use('/api', apiRoute);
     app.use('*', errorRoute);
 };

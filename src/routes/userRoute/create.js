@@ -157,6 +157,7 @@ create = (req, res) => {
   } else if (accion === 'zynch_pack') {
     let zynch_pack = new ZynchPack({
       name_pack: dato.name,
+      email_user: dato.email,
       total_swaps: dato.total_swaps,
       available_swaps: dato.available_swaps,
       serie: dato.serie,

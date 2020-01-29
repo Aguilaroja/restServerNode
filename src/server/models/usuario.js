@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const uuidv4 = require('uuid/v4');
 
 //Validaciones personalizadas para roles
 let rolesValidos = {
@@ -10,6 +11,12 @@ let rolesValidos = {
 let Schema = mongoose.Schema;
 
 let usuarioSchema = new Schema({
+    id: {
+        type: String,
+        required: true,
+        default: uuidv4(),
+        unique: true
+    },
     nombre: {
         type: String,
         required: [true, 'El nombre es necesario']
@@ -29,8 +36,7 @@ let usuarioSchema = new Schema({
     },
     img: {
         type: String,
-        required: false,
-        default: 'No photo'
+        required: false
     },
     role: {
         type: String,
@@ -54,9 +60,9 @@ usuarioSchema.methods.toJSON = function() {
     delete userObject.password;
 
     return userObject;
-}
+};
 
 //Validaciones: Para éste plugin se necesita el paquete mongoose-unique-validator
-usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' }); //{PATH} es el dato que se declara como único 
+usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' }); //{PATH} es el dato que se declara como único
 
 module.exports = mongoose.model('Usuario', usuarioSchema);

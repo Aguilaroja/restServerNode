@@ -9,19 +9,11 @@ const mongoose = require('mongoose');
  */
 const init = () => {
     mongoose.connect(config.mongoUrl, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useCreateIndex: true,
-            useFindAndModify: false
-        })
-        /*
-                .then(resp => {
-                    console.log(resp);
-                })
-                .catch(err => {
-                    console.log(err);
-                })*/
-    ;
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false
+    });
     const db = mongoose.connection;
     error(db);
     open(db);
@@ -46,6 +38,7 @@ const error = db => {
 const open = db => {
     db.once('open', () => {
         log.info('Database online');
+        log.debug(`Mongo Url string: ${config.mongoUrl}`);
     });
 };
 

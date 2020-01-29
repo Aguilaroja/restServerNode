@@ -36,7 +36,7 @@ const init = () => {
 
     app.use(
         bodyParser.urlencoded({
-            extended: false,
+            extended: true,
             verify: (req, res, buf, encoding) => {
                 req.rawBody = buf.toString();
             }
