@@ -29,11 +29,6 @@ let qrCodeSchema = new Schema({
     required: true,
     default: 0
   },
-  activeToken: {
-    type: String,
-    required: false,
-    default: null
-  },
   dateGenerated: {
     type: Date,
     default: null,

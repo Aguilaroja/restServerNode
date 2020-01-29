@@ -21,7 +21,6 @@ const getQrCode = async (req, res) => {
     });
   } else {
     //Encontrar el VCU, el usuario relacionado con este VCU, los swaps disponibles
-    // TODO: Encontrar el token usado cuando se generó esta solicitud
     const moto = await ZynchMoto.findOne({ serie: vcu });
     if (!moto) {
       log.debug("VCU doesn't exist");
