@@ -61,7 +61,7 @@
       $(function() {
         $('#btnGet').click(function() {
           $.ajax({
-            url: 'http://localhost:3000/user/getQrCode',
+            url: '{{url}}/user/getQrCode',
             method: 'POST',
             data: {
               vcu: $('#inputVCU').val() ? $('#inputVCU').val() : $('#inputVCU').attr('placeholder'),

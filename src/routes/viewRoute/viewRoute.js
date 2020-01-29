@@ -1,5 +1,5 @@
 'use strict';
-
+const { config } = require('../../server/config');
 let views = {};
 
 /**
@@ -24,7 +24,7 @@ const jwt = require('jsonwebtoken');
 views.recovery = (req, res) => {
   let token = req.query ? req.query.token : '';
 
-  const verifica = jwt.verify(token, process.env.SEED, (err, decoded) => {
+  const verifica = jwt.verify(token, config.seed, (err, decoded) => {
     if (err) {
       return res.status(401).json({
         ok: false,
@@ -50,7 +50,7 @@ views.recovery = (req, res) => {
  * Render qr code page
  */
 views.qr = (req, res) => {
-  res.render('qrcode');
+  res.render('qrcode', { url: config.url, anio: new Date().getFullYear() });
 };
 
 module.exports = views;
