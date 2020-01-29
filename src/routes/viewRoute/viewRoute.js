@@ -40,6 +40,7 @@ views.recovery = (req, res) => {
 
     res.render('recovery', {
         nombre: verifica.email,
+        img: verifica.img,
         token: token,
         anio: new Date().getFullYear()
     });

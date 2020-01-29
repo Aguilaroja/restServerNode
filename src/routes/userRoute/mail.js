@@ -39,7 +39,8 @@ mail = (req, res) => {
                 user: {
                     name: usuarioDB.nombre,
                     email: usuarioDB.email,
-                    role: usuarioDB.role
+                    role: usuarioDB.role,
+                    img: usuarioDB.img
                 }
             },
             process.env.SEED, { expiresIn: 60 * 5 }

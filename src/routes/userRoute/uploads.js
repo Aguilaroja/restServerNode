@@ -50,7 +50,7 @@ upload = (req, res) => {
     // 183912kuasidauso-123.jpg
     let nombreArchivo = `${ id }-${ new Date().getMilliseconds()  }.${ extension }`;
 
-    archivo.mv(path.join(`src/uploads/${ tipo }/${ nombreArchivo }`), (err) => {
+    archivo.mv(path.join(`public/assets/img/uploads/${ tipo }/${ nombreArchivo }`), (err) => {
 
         if (err) {
             return res.status(500).json({
@@ -147,7 +147,7 @@ function imagenScooter(id, res, nombreArchivo) {
 
 function borraArchivo(nombreImagen, tipo) {
     // Ruta de la imagen almacenada en la DB
-    let pathImagen = `src/uploads/${tipo}/${nombreImagen}`;
+    let pathImagen = `public/assets/img/uploads/${tipo}/${nombreImagen}`;
 
     // fs.existsSync(): Valida si existe esa ruta
     if (fs.existsSync(pathImagen)) {
