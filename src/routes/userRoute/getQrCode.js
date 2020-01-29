@@ -14,7 +14,7 @@ const getQrCode = async (req, res) => {
   const width = body.width ? body.width : 640;
   let qrCodeObject = {};
 
-  if (!vcu) {
+  if (!vcu || !width) {
     return res.json({
       ok: false,
       err: { message: '400 - Bad Request' }
