@@ -3,7 +3,7 @@ const login = require('./login');
 const mail = require('./mail');
 const updatepass = require('./updatepass');
 const upload = require('./uploads');
-const getQrCode = require('./getQrCode');
+const { getQrCode } = require('./getQrCode');
 
 const userRoute = {};
 userRoute.create = create;
