@@ -4,7 +4,7 @@ const formatoFecha = require('../../server/functions/formatoFecha');
 packs = (req, res) => {
     let dato = req.query;
 
-    ZynchPack.find({ id_user: dato.id }, (err, zynchDB) => {
+    ZynchPack.find({ id_user: dato.id_user }, (err, zynchDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
