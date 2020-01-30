@@ -10,7 +10,7 @@ let statusValidos = {
 let Schema = mongoose.Schema;
 
 let zynchMotoSchema = new Schema({
-    email_user: {
+    id_user: {
         type: String,
         required: true
     },

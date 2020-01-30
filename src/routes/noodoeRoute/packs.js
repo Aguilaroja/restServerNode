@@ -2,32 +2,32 @@ const ZynchPack = require('../../server/models/zynch_pack'); //Ésto es un objet
 const formatoFecha = require('../../server/functions/formatoFecha');
 
 packs = (req, res) => {
-  let dato = req.query;
+    let dato = req.query;
 
-  ZynchPack.find({ email_user: dato.email }, (err, zynchDB) => {
-    if (err) {
-      return res.status(500).json({
-        ok: false,
-        err
-      });
-    }
-
-    if (!zynchDB) {
-      return res.status(400).json({
-        ok: false,
-        err: {
-          message: 'Email incorrecto'
+    ZynchPack.find({ id_user: dato.id }, (err, zynchDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
         }
-      });
-    }
 
-    zynchDB.forEach(formatoFecha);
+        if (!zynchDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Email incorrecto'
+                }
+            });
+        }
 
-    res.json({
-      ok: true,
-      zynch: zynchDB
+        zynchDB.forEach(formatoFecha);
+
+        res.json({
+            ok: true,
+            zynch: zynchDB
+        });
     });
-  });
 };
 
 module.exports = packs;

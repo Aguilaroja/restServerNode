@@ -75,7 +75,7 @@ login = (req, res) => {
                             });
                         }
 
-                        ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
+                        ZynchMoto.find({ id_user: usuarioDB.id, predetermined: true }, (err, zynchDB) => {
                             if (err) {
                                 return res.status(500).json({
                                     ok: false,
@@ -132,7 +132,7 @@ login = (req, res) => {
                         });
                     });
                 } else {
-                    ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
+                    ZynchMoto.find({ id_user: usuarioDB.id, predetermined: true }, (err, zynchDB) => {
                         if (err) {
                             return res.status(500).json({
                                 ok: false,
@@ -144,18 +144,11 @@ login = (req, res) => {
                             return res.status(400).json({
                                 ok: false,
                                 err: {
-                                    message: 'Email incorrecto'
+                                    message: 'ID incorrecto'
                                 }
                             });
                         }
-                        if (!!!zynchDB.length) {
-                            return res.status(400).json({
-                                ok: false,
-                                err: {
-                                    message: 'Motos no encontradas'
-                                }
-                            });
-                        }
+
                         let objetoZynch = zynchDB[0];
 
                         ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {

@@ -10,7 +10,7 @@ let zynchPackSchema = new Schema({
         required: true,
         default: uuidv4()
     },
-    email_user: {
+    id_user: {
         type: String,
         required: true
     },
