@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
+//Validaciones personalizadas
+let statusValidos = {
+    values: ['active', 'inactive'],
+    message: '{VALUE} no es un status válido'
+};
+
 let Schema = mongoose.Schema;
 
 let zynchMotoSchema = new Schema({
@@ -17,13 +23,22 @@ let zynchMotoSchema = new Schema({
         required: true,
         unique: true
     },
-    swaps: {
-        type: Number,
-        required: true
-    },
     predetermined: {
         type: Boolean,
         default: false
+    },
+    locked: {
+        type: Boolean,
+        default: false
+    },
+    status: {
+        type: String,
+        default: 'active',
+        enum: statusValidos
+    },
+    img: {
+        type: String,
+        default: 'scooter.jpeg'
     }
 });
 

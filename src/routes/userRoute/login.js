@@ -42,6 +42,7 @@ login = (req, res) => {
         // Genera el JWT
         let token = jwt.sign({
                 user: {
+                    id: usuarioDB.id,
                     name: usuarioDB.nombre,
                     email: usuarioDB.email,
                     role: usuarioDB.role
@@ -119,6 +120,7 @@ login = (req, res) => {
                                 res.json({
                                     ok: true,
                                     user: {
+                                        id: usuarioDB.id,
                                         name: usuarioDB.nombre,
                                         email: usuarioDB.email,
                                         role: usuarioDB.role
@@ -182,6 +184,7 @@ login = (req, res) => {
                             res.json({
                                 ok: true,
                                 user: {
+                                    id: usuarioDB.id,
                                     name: usuarioDB.nombre,
                                     email: usuarioDB.email,
                                     role: usuarioDB.role

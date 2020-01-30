@@ -6,7 +6,7 @@ updatepass = (req, res) => {
     let user = req.user;
     let datos = req.body;
 
-    Usuario.findOneAndUpdate({ email: user.email }, { password: bcrypt.hashSync(datos.pass1, 10) },
+    Usuario.findOneAndUpdate({ id: user.id }, { password: bcrypt.hashSync(datos.pass1, 10) },
         (err, usuarioDB) => {
             if (err) {
                 return res.status(500).json({

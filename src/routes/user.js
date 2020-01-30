@@ -13,7 +13,8 @@ router.get('/login', [verificaCliente], userRoute.login);
 router.post('/updatepass', [verificaTokenJWT], userRoute.updatepass);
 router.get('/mail', [verificaCliente], userRoute.mail);
 router.get('/create/:create', userRoute.create);
-router.put('/upload/:tipo/:id', [verificaTokenDB], userRoute.upload);
-router.post('/getQrCode', /*[verificaTokenDB],*/ userRoute.getQrCode);
+router.put('/upload/:tipo/:id', [verificaCliente, verificaTokenDB], userRoute.upload);
+router.post('/getQrCode', [verificaCliente], userRoute.getQrCode);
+router.put('/updateZynch/:action', [verificaCliente, verificaTokenDB], userRoute.updateZynch);
 
 module.exports = router;
