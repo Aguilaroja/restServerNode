@@ -14,7 +14,7 @@ class UserAPI extends DataSource {
   qrCodeReducer(response) {
     return {
       image: response || null,
-      err: response.err ? response.err.message : '',
+      err: response.err ? response.err.message : null,
       ok: response.ok
     };
   }

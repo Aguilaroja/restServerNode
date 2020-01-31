@@ -17,7 +17,7 @@ const listen = () => {
   server = http.createServer(app).listen(config.port);
   routes.init(app);
   stats.memory();
-  log.info(`🚀  Escuchando en http://${config.url}`);
+  log.info(`🚀  Escuchando en ${config.url}`);
 };
 
 /**

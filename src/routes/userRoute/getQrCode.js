@@ -8,10 +8,9 @@ const ZynchPack = require('../../server/models/zynch_pack');
 const Usuario = require('../../server/models/usuario');
 
 // Esta funcion es la entrada para la api REST
-const getQrCode = async (req, res) => {
+const createQrCodeREST = async (req, res) => {
   // Verificar que la solicitud esté formada correctamente
-  const body = req.body ? req.body : null;
-  const vcu = body.vcu ? body.vcu : null;
+  const vcu = req.body.vcu ? req.body.vcu : null;
   const width = body.width ? body.width : 640;
   if (!vcu || !width) {
     return {
@@ -128,4 +127,4 @@ const createQrCodeUrl = async (dataForQrCode, width, callback) => {
   }
 };
 
-module.exports = { getQrCode, createQrCode };
+module.exports = { createQrCodeREST, createQrCode };
