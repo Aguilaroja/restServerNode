@@ -5,40 +5,44 @@ const uuidv4 = require('uuid/v4');
 let Schema = mongoose.Schema;
 
 let zynchPackSchema = new Schema({
-  id: {
-    type: String,
-    required: true,
-    default: uuidv4()
-  },
-  email_user: {
-    type: String,
-    required: true
-  },
-  name_pack: {
-    type: String,
-    required: true
-  },
-  serie: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  total_swaps: {
-    type: Number,
-    required: true
-  },
-  available_swaps: {
-    type: Number,
-    required: true
-  },
-  valid_until: {
-    type: Date,
-    default: Date()
-  },
-  expired: {
-    type: Boolean,
-    default: false
-  }
+    id: {
+        type: String,
+        required: true,
+        default: uuidv4()
+    },
+    email_user: {
+        type: String,
+        required: true
+    },
+    name_pack: {
+        type: String,
+        required: true
+    },
+    serie: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    total_swaps: {
+        type: Number,
+        required: true
+    },
+    available_swaps: {
+        type: Number,
+        required: true
+    },
+    valid_until: {
+        type: Date,
+        default: Date()
+    },
+    expired: {
+        type: Boolean,
+        default: false
+    },
+    price: {
+        type: Number,
+        required: true
+    }
 });
 
 //Validaciones: Para éste plugin se necesita el paquete mongoose-unique-validator

@@ -4,9 +4,9 @@ const Usuario = require('../../server/models/usuario'); //Ésto es un objeto par
 const log = require('../../server/config/services/logger');
 
 mail = (req, res) => {
-    let email = req.query.email;
+    let id_user = req.query.id_user;
 
-    if (!email) {
+    if (!id_user) {
         return res.status(400).json({
             ok: false,
             err: {
@@ -15,7 +15,7 @@ mail = (req, res) => {
         });
     }
 
-    Usuario.findOne({ email: email }, (err, usuarioDB) => {
+    Usuario.findOne({ id: id_user }, (err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -37,9 +37,9 @@ mail = (req, res) => {
         // Genera el JWT
         let token = jwt.sign({
                 user: {
+                    id: usuarioDB.id_user,
                     name: usuarioDB.nombre,
                     email: usuarioDB.email,
-                    role: usuarioDB.role,
                     img: usuarioDB.img
                 }
             },

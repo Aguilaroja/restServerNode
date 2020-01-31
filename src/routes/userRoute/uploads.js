@@ -71,7 +71,7 @@ upload = (req, res) => {
 
 function imagenUsuario(id, res, nombreArchivo) {
 
-    Usuario.findById(id, (err, usuarioDB) => {
+    Usuario.findOne({ id: id }, (err, usuarioDB) => {
 
         if (err) {
             borraArchivo(nombreArchivo, 'users');
@@ -109,7 +109,7 @@ function imagenUsuario(id, res, nombreArchivo) {
 
 function imagenScooter(id, res, nombreArchivo) {
 
-    ZynchMoto.findById(id, (err, zynchDB) => {
+    ZynchMoto.findOne({ serie: id }, (err, zynchDB) => {
 
         if (err) {
             borraArchivo(nombreArchivo, 'scooters');

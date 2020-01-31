@@ -9,196 +9,195 @@ const formatoFecha = require('../../server/functions/formatoFecha');
 const { config, log } = require('../../server/config');
 
 login = (req, res) => {
-  let dato = req.query;
-  let passwordIn = String(dato.password);
-  let ip = req.ip;
+    let dato = req.query;
+    let passwordIn = String(dato.password);
+    let ip = req.ip;
 
-  // Consulta el usuario
-  Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
-    if (err) {
-      log.debug(`${err}`);
-      return res.status(500).json({
-        ok: false,
-        err
-      });
-    }
-    if (!usuarioDB) {
-      return res.status(400).json({
-        ok: false,
-        err: {
-          message: 'Usuario* o contraseña incorrectos'
-        }
-      });
-    }
-    // Compara que las contraseñas sean iguales ya encriptadas
-    if (!bcrypt.compareSync(passwordIn, usuarioDB.password)) {
-      return res.status(400).json({
-        ok: false,
-        err: {
-          message: 'Usuario o contraseña* incorrectos'
-        }
-      });
-    }
-    // Genera el JWT
-    let token = jwt.sign(
-      {
-        user: {
-          name: usuarioDB.nombre,
-          email: usuarioDB.email,
-          role: usuarioDB.role
-        }
-      },
-      process.env.SEED,
-      { expiresIn: config.caducidadToken }
-    );
-
-    TokenLogin.findOneAndUpdate(
-      { ip_address: ip },
-      { tokenLog: token, date_ini: Date() },
-      (err, tokenIpDB) => {
+    // Consulta el usuario
+    Usuario.findOne({ email: dato.email }, (err, usuarioDB) => {
         if (err) {
-          return res.status(500).json({
-            ok: false,
-            err
-          });
-        }
-
-        if (!tokenIpDB) {
-          let tokenLogin = new TokenLogin({
-            email: usuarioDB.email,
-            tokenLog: token,
-            ip_address: ip
-          });
-
-          tokenLogin.save((err, tokenLoginDB) => {
-            if (err) {
-              return res.status(500).json({
+            log.debug(`${err}`);
+            return res.status(500).json({
                 ok: false,
                 err
-              });
-            }
-
-            ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
-              if (err) {
-                return res.status(500).json({
-                  ok: false,
-                  err
-                });
-              }
-
-              if (!zynchDB) {
-                return res.status(400).json({
-                  ok: false,
-                  err: {
-                    message: 'Email incorrecto'
-                  }
-                });
-              }
-
-              let objetoZynch = zynchDB[0];
-
-              ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
-                if (err) {
-                  return res.status(500).json({
-                    ok: false,
-                    err
-                  });
+            });
+        }
+        if (!usuarioDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario* o contraseña incorrectos'
                 }
-
-                if (!zynchPackDB) {
-                  return res.status(400).json({
-                    ok: false,
-                    err: {
-                      message: 'No existe plan para esta moto'
-                    }
-                  });
+            });
+        }
+        // Compara que las contraseñas sean iguales ya encriptadas
+        if (!bcrypt.compareSync(passwordIn, usuarioDB.password)) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario o contraseña* incorrectos'
                 }
-
-                zynchPackDB.forEach(formatoFecha);
-
-                let objetoZynchPack = zynchPackDB[0];
-                var ob = JSON.parse(JSON.stringify(objetoZynchPack));
-                ob.name_zynch = objetoZynch.name_zynch;
-
-                res.json({
-                  ok: true,
-                  user: {
+            });
+        }
+        // Genera el JWT
+        let token = jwt.sign({
+                user: {
+                    id: usuarioDB.id,
                     name: usuarioDB.nombre,
                     email: usuarioDB.email,
                     role: usuarioDB.role
-                  },
-                  zynch: ob,
-                  token
-                });
-              });
-            });
-          });
-        } else {
-          ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
-            if (err) {
-              return res.status(500).json({
-                ok: false,
-                err
-              });
-            }
-
-            if (!zynchDB) {
-              return res.status(400).json({
-                ok: false,
-                err: {
-                  message: 'Email incorrecto'
                 }
-              });
-            }
-            if (!!!zynchDB.length) {
-              return res.status(400).json({
-                ok: false,
-                err: {
-                  message: 'Motos no encontradas'
+            },
+            process.env.SEED, { expiresIn: config.caducidadToken }
+        );
+
+        TokenLogin.findOneAndUpdate({ ip_address: ip }, { tokenLog: token, date_ini: Date() },
+            (err, tokenIpDB) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        err
+                    });
                 }
-              });
+
+                if (!tokenIpDB) {
+                    let tokenLogin = new TokenLogin({
+                        email: usuarioDB.email,
+                        tokenLog: token,
+                        ip_address: ip
+                    });
+
+                    tokenLogin.save((err, tokenLoginDB) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                err
+                            });
+                        }
+
+                        ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
+                            if (err) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    err
+                                });
+                            }
+
+                            if (!zynchDB) {
+                                return res.status(400).json({
+                                    ok: false,
+                                    err: {
+                                        message: 'Email incorrecto'
+                                    }
+                                });
+                            }
+
+                            let objetoZynch = zynchDB[0];
+
+                            ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
+                                if (err) {
+                                    return res.status(500).json({
+                                        ok: false,
+                                        err
+                                    });
+                                }
+
+                                if (!zynchPackDB) {
+                                    return res.status(400).json({
+                                        ok: false,
+                                        err: {
+                                            message: 'No existe plan para esta moto'
+                                        }
+                                    });
+                                }
+
+                                zynchPackDB.forEach(formatoFecha);
+
+                                let objetoZynchPack = zynchPackDB[0];
+                                var ob = JSON.parse(JSON.stringify(objetoZynchPack));
+                                ob.name_zynch = objetoZynch.name_zynch;
+
+                                res.json({
+                                    ok: true,
+                                    user: {
+                                        id: usuarioDB.id,
+                                        name: usuarioDB.nombre,
+                                        email: usuarioDB.email,
+                                        role: usuarioDB.role
+                                    },
+                                    zynch: ob,
+                                    token
+                                });
+                            });
+                        });
+                    });
+                } else {
+                    ZynchMoto.find({ email_user: dato.email, predetermined: true }, (err, zynchDB) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                err
+                            });
+                        }
+
+                        if (!zynchDB) {
+                            return res.status(400).json({
+                                ok: false,
+                                err: {
+                                    message: 'Email incorrecto'
+                                }
+                            });
+                        }
+                        if (!!!zynchDB.length) {
+                            return res.status(400).json({
+                                ok: false,
+                                err: {
+                                    message: 'Motos no encontradas'
+                                }
+                            });
+                        }
+                        let objetoZynch = zynchDB[0];
+
+                        ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
+                            if (err) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    err
+                                });
+                            }
+
+                            if (!zynchPackDB) {
+                                return res.status(400).json({
+                                    ok: false,
+                                    err: {
+                                        message: 'No existe plan para esta moto'
+                                    }
+                                });
+                            }
+
+                            zynchPackDB.forEach(formatoFecha);
+
+                            let objetoZynchPack = zynchPackDB[0];
+                            var ob = JSON.parse(JSON.stringify(objetoZynchPack));
+                            ob.name_zynch = objetoZynch.name_zynch;
+
+                            res.json({
+                                ok: true,
+                                user: {
+                                    id: usuarioDB.id,
+                                    name: usuarioDB.nombre,
+                                    email: usuarioDB.email,
+                                    role: usuarioDB.role
+                                },
+                                zynch: ob,
+                                token
+                            });
+                        });
+                    });
+                }
             }
-            let objetoZynch = zynchDB[0];
-
-            ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
-              if (err) {
-                return res.status(500).json({
-                  ok: false,
-                  err
-                });
-              }
-
-              if (!zynchPackDB) {
-                return res.status(400).json({
-                  ok: false,
-                  err: {
-                    message: 'No existe plan para esta moto'
-                  }
-                });
-              }
-
-              zynchPackDB.forEach(formatoFecha);
-
-              let objetoZynchPack = zynchPackDB[0];
-              var ob = JSON.parse(JSON.stringify(objetoZynchPack));
-              ob.name_zynch = objetoZynch.name_zynch;
-
-              res.json({
-                ok: true,
-                user: {
-                  name: usuarioDB.nombre,
-                  email: usuarioDB.email,
-                  role: usuarioDB.role
-                },
-                zynch: ob,
-                token
-              });
-            });
-          });
-        }
-      }
-    );
-  });
+        );
+    });
 };
 
 module.exports = login;
