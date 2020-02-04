@@ -18,9 +18,10 @@ const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('../../graphql/schema');
 const resolvers = require('../../graphql/resolvers');
 const UserAPI = require('../../graphql/dataSources/user');
+const ZynchAPI = require('../../graphql/dataSources/zynch');
 const dataSources = () => ({
-  userAPI: new UserAPI()
-  /* noodoeAPI: new NoodoeAPI()*/
+  userAPI: new UserAPI(),
+  zynchApi: new ZynchAPI()
 });
 
 /**

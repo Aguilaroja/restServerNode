@@ -24,7 +24,9 @@ const development = {
   mongoUrl: `mongodb://${process.env.MONGODB_HOST}`,
   seed: process.env.SEED,
   caducidadToken: parseInt(60 * 60 * 24 * 30), // 30 dias
-  frontendStaticFolder: path.join(basePath + 'src/views')
+  frontendStaticFolder: path.join(basePath + 'src/views'),
+  noodoeOwnerId: process.env.NOODOE_OWNER_ID,
+  noodoeCabinetOwnerType: process.env.NOODOE_CABINET_OWNER_TYPE
 };
 
 const production = {
@@ -38,7 +40,9 @@ const production = {
   )}@${process.env.MONGODB_HOST}`,
   seed: process.env.SEED,
   frontendStaticFolder: path.join(basePath + '/src/views'),
-  caducidadToken: process.env.CADUCIDAD_TOKEN
+  caducidadToken: process.env.CADUCIDAD_TOKEN,
+  noodoeOwnerId: process.env.NOODOE_OWNER_ID,
+  noodoeCabinetOwnerType: process.env.NOODOE_CABINET_OWNER_TYPE
 };
 
 const test = {

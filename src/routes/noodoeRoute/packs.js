@@ -30,4 +30,8 @@ packs = (req, res) => {
   });
 };
 
+const findPacksByEmail = async email => {};
+
+const findPacksByid = async userId => {};
+
 module.exports = packs;

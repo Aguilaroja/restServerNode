@@ -1,7 +1,7 @@
 const getOwnerInfo = require('./getOwnerInfo');
 const zynchs = require('./zynchs');
 const packs = require('./packs');
-const centers = require('./centers');
+const { centers } = require('./centers');
 const update = require('./update');
 
 const noodoeRoute = {};
