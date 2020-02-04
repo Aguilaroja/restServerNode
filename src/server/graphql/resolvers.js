@@ -1,27 +1,26 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
+const { AuthenticationError } = require('../exceptions');
 
 const resolverMap = {
-  CentersResult: {
-    __resolveType(obj, context, info) {
-      console.log('on __resolveType');
-      console.log(obj);
-      return null;
-    }
-  },
   Query: {
-    chargeCenters: async (_, { location = null }, { dataSources }) => {
-      console.log(location);
+    chargeCenters: async (_, { location = null }, context) => {
+      const { dataSources } = context;
+      if (!context.client) throw new AuthenticationError();
       const response = await dataSources.zynchApi.getChargerCenters(location);
       return response;
     },
-    serviceCenters: async (_, { location = null }, { dataSources }) => {
+    serviceCenters: async (_, { location = null }, context) => {
+      const { dataSources } = context;
+      if (!context.client) throw new AuthenticationError();
       const response = await dataSources.zynchApi.getServiceCenters(location);
       return response;
     }
   },
   Mutation: {
-    createQrCode: async (_, { vcu, width = 640 }, { dataSources }) => {
+    createQrCode: async (_, { vcu, width = 640 }, context) => {
+      const { dataSources } = context;
+      if (!context.client) throw new AuthenticationError();
       const response = await dataSources.userAPI.createQrCode(vcu, width);
       return response;
     }

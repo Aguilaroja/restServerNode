@@ -3,11 +3,7 @@
 const router = require('express').Router();
 
 //Middlewares
-const {
-  verificaCliente,
-  verificaTokenDB,
-  verificaTokenJWT
-} = require('../server/middlewares/autenticacion');
+const { verificaCliente, verificaTokenDB } = require('../server/middlewares/autenticacion');
 
 const noodoeRoute = require('./noodoeRoute');
 

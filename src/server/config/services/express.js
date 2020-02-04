@@ -15,6 +15,7 @@ const fileUpload = require('express-fileupload');
  * GraphQL Components
  */
 const { ApolloServer } = require('apollo-server-express');
+const { findClientByKeyAndId } = require('../../middlewares/autenticacion');
 const typeDefs = require('../../graphql/schema');
 const resolvers = require('../../graphql/resolvers');
 const UserAPI = require('../../graphql/dataSources/user');
@@ -64,12 +65,21 @@ const init = () => {
   app.use(
     fileUpload({
       // createParentPath: true,
-      debug: config.env == 'PRODUCTION' ? false : true,
+      debug: config.env == 'PRODUCTION' ? false : false,
       useTempFiles: true
     })
   );
 
-  const apolloServer = new ApolloServer({ typeDefs, resolvers, dataSources });
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+      const { err, client } = await findClientByKeyAndId(req.get('id'), req.get('key_client'));
+      if (err) throw new AuthenticationError('cliente no autorizado');
+      return { client };
+    },
+    dataSources
+  });
   apolloServer.applyMiddleware({ app, path: '/api/graphql' });
   return app;
 };

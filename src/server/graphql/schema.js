@@ -5,7 +5,6 @@ const typeDefs = gql`
     login: Usuario
     serviceCenters(location: LocationInput): [ServiceCenter]
     chargeCenters(location: LocationInput): [ChargerCenter]
-    centers(type: CenterEnum, location: LocationInput): [CentersResult]
   }
   type Mutation {
     createQrCode(vcu: String!, width: Int): QrCode
@@ -30,16 +29,6 @@ const typeDefs = gql`
     estado: Boolean
     google: Boolean
     error: Error
-  }
-
-  type CenterInfo {
-    name: String
-    address: String
-    phoneNumber: String
-    location: Location
-    scheduleMonFri: String
-    scheduleSaturday: String
-    scheduleSunday: String
   }
 
   type ChargerCenter {
@@ -72,13 +61,6 @@ const typeDefs = gql`
     openToday: String
     closeToday: String
     error: Error
-  }
-
-  union CentersResult = ChargerCenter | ServiceCenter
-
-  enum CenterEnum {
-    CHARGING_CENTERS
-    SERVICE_CENTERS
   }
 
   type ZynchMoto {
