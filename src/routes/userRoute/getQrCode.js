@@ -11,13 +11,13 @@ const Usuario = require('../../server/models/usuario');
 const createQrCodeREST = async (req, res) => {
   // Verificar que la solicitud esté formada correctamente
   const body = req.body;
-  const vcu = body.vcu ? body.vcu : null;
+  const vcu = body ? body.vcu : null;
   const width = body.width ? body.width : 640;
-  if (!vcu || !width) {
-    return {
+  if (!vcu && !width) {
+    return res.json({
       ok: false,
       err: { message: '400 - Bad Request' }
-    };
+    });
   } else {
     response = await createQrCode(vcu, width);
     return res.json(response);
