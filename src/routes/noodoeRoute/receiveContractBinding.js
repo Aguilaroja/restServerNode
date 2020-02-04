@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const Usuario = require('../../server/models/usuario'); //Ésto es un objeto para el Schema
-const ZynchMoto = require('../../server/models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchScooter = require('../../server/models/zynch_scooter'); //Ésto es un objeto para el Schema
 const ZynchPack = require('../../server/models/zynch_pack'); //Ésto es un objeto para el Schema
 const log = require('../../server/config/services/logger');
 
@@ -27,10 +27,10 @@ receiveContractBinding = async(req, res) => {
         });
     }
 
-    let scooter = new ZynchMoto({
+    let scooter = new ZynchScooter({
         id_user: guardaUser.id,
         name_zynch: datoVehicle.name,
-        serie: datoVehicle.vcu
+        vcu: datoVehicle.vcu
     });
 
     const guardaVehicle = await scooter.save();
@@ -49,7 +49,7 @@ receiveContractBinding = async(req, res) => {
         id_user: guardaUser.id,
         total_swaps: datoPlan.total_swaps,
         available_swaps: datoPlan.available_swaps,
-        serie: guardaVehicle.serie,
+        vcu: guardaVehicle.vcu,
         valid_until: datoPlan.valid_until,
         price: datoPlan.price
     });

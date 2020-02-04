@@ -1,9 +1,9 @@
-const ZynchMoto = require('../../server/models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchScooter = require('../../server/models/zynch_scooter'); //Ésto es un objeto para el Schema
 
-zynchs = (req, res) => {
+scooter = (req, res) => {
     let dato = req.query;
 
-    ZynchMoto.find({ id_user: dato.id_user }, (err, zynchDB) => {
+    ZynchScooter.find({ id_user: dato.id_user }, (err, scooterDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -11,7 +11,7 @@ zynchs = (req, res) => {
             });
         }
 
-        if (!zynchDB) {
+        if (!scooterDB) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -22,9 +22,9 @@ zynchs = (req, res) => {
 
         res.json({
             ok: true,
-            zynch: zynchDB
+            scooter: scooterDB
         });
     });
 };
 
-module.exports = zynchs;
+module.exports = scooter;

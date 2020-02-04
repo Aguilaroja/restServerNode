@@ -9,7 +9,7 @@ let statusValidos = {
 
 let Schema = mongoose.Schema;
 
-let zynchMotoSchema = new Schema({
+let zynchScooterSchema = new Schema({
     id_user: {
         type: String,
         required: true
@@ -18,7 +18,7 @@ let zynchMotoSchema = new Schema({
         type: String,
         required: true
     },
-    serie: {
+    vcu: {
         type: String,
         required: true,
         unique: true
@@ -43,6 +43,6 @@ let zynchMotoSchema = new Schema({
 });
 
 //Validaciones: Para éste plugin se necesita el paquete mongoose-unique-validator
-zynchMotoSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' }); //{PATH} es el dato que se declara como único 
+zynchScooterSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' }); //{PATH} es el dato que se declara como único 
 
-module.exports = mongoose.model('ZynchMoto', zynchMotoSchema);
+module.exports = mongoose.model('ZynchScooter', zynchScooterSchema);

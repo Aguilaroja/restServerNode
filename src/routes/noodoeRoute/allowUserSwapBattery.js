@@ -1,14 +1,15 @@
 const Usuario = require('../../server/models/usuario'); //Ésto es un objeto para el Schema
-const ZynchMoto = require('../../server/models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchScooter = require('../../server/models/zynch_scooter'); //Ésto es un objeto para el Schema
 const ZynchPack = require('../../server/models/zynch_pack'); //Ésto es un objeto para el Schema
 const log = require('../../server/config/services/logger');
+const jwt = require('jsonwebtoken');
 const formatoFecha = require('../../server/functions/formatoFecha');
 
 allowUserSwapBattery = async(req, res) => {
     let uid = req.query.uid;
     let vcu = req.query.vcu;
 
-    const scooter = await ZynchMoto.findOne({ serie: vcu });
+    const scooter = await ZynchScooter.findOne({ vcu: vcu });
     // console.log(scooter);
     if (!scooter) {
         return res.json({
@@ -43,7 +44,7 @@ allowUserSwapBattery = async(req, res) => {
         });
     }
 
-    const plan = await ZynchPack.findOne({ serie: vcu });
+    const plan = await ZynchPack.findOne({ vcu: vcu });
     // console.log(plan);
     let arrayPlan = [plan];
     arrayPlan.forEach(formatoFecha);
@@ -71,6 +72,18 @@ allowUserSwapBattery = async(req, res) => {
         });
     }
 
+    let token = jwt.sign({
+            plan: {
+                id: objPlan.id,
+                name_plan: objPlan.name_pack,
+                valid_until: formato(objPlan.valid_until),
+                expired: objPlan.expired,
+                total_swaps: objPlan.total_swaps,
+                available_swaps: objPlan.available_swaps
+            }
+        },
+        process.env.SEED, { expiresIn: 60 * 10 });
+
     let obj = {
         name_plan: objPlan.name_pack,
         valid_until: formato(objPlan.valid_until),
@@ -82,7 +95,8 @@ allowUserSwapBattery = async(req, res) => {
     res.json({
         result: {
             ok: true,
-            plan: obj
+            plan: obj,
+            token
         }
     });
 };

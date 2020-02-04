@@ -4,7 +4,7 @@ const Usuario = require('../../server/models/usuario'); //Ésto es un objeto par
 const ChargerCenter = require('../../server/models/charger_center'); //Ésto es un objeto para el Schema
 const ServiceCenter = require('../../server/models/service_center'); //Ésto es un objeto para el Schema
 const Client = require('../../server/models/client'); //Ésto es un objeto para el Schema
-const ZynchMoto = require('../../server/models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchScooter = require('../../server/models/zynch_scooter'); //Ésto es un objeto para el Schema
 const ZynchPack = require('../../server/models/zynch_pack'); //Ésto es un objeto para el Schema
 
 create = (req, res) => {
@@ -131,14 +131,14 @@ create = (req, res) => {
                 usuario: usuarioDB
             });
         });
-    } else if (accion === 'zynch_moto') {
-        let zynch_moto = new ZynchMoto({
-            email_user: dato.email,
+    } else if (accion === 'zynch_scooter') {
+        let zynch_scooter = new ZynchScooter({
+            id_user: dato.id_user,
             name_zynch: dato.name,
-            serie: dato.serie
+            vcu: dato.vcu
         });
 
-        zynch_moto.save((err, zynchDB) => {
+        zynch_scooter.save((err, scooterDB) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
@@ -148,16 +148,16 @@ create = (req, res) => {
 
             res.json({
                 ok: true,
-                zynch: zynchDB
+                scooter: scooterDB
             });
         });
     } else if (accion === 'zynch_pack') {
         let zynch_pack = new ZynchPack({
             name_pack: dato.name,
-            id_user: dato.id,
+            id_user: dato.id_user,
             total_swaps: dato.total_swaps,
             available_swaps: dato.available_swaps,
-            serie: dato.serie,
+            vcu: dato.vcu,
             valid_until: dato.valid_until,
             price: dato.price
         });

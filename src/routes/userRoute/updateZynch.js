@@ -1,11 +1,11 @@
-const ZynchMoto = require('../../server/models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchScooter = require('../../server/models/zynch_scooter'); //Ésto es un objeto para el Schema
 
 updateZynch = (req, res) => {
     let dato = req.body;
     let action = req.params.action;
 
     if (action == 'rename') {
-        ZynchMoto.findOneAndUpdate({ serie: dato.vcu }, { name_zynch: dato.rename },
+        ZynchScooter.findOneAndUpdate({ vcu: dato.vcu }, { name_zynch: dato.rename },
             (err, zynchDB) => {
                 if (err) {
                     return res.status(500).json({
