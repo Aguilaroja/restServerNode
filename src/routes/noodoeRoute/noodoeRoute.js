@@ -1,7 +1,7 @@
 const getOwnerInfo = require('./getOwnerInfo');
 const scooters = require('./scooters');
 const packs = require('./packs');
-const centers = require('./centers');
+const { centers } = require('./centers');
 const update = require('./update');
 const allowUserSwapBattery = require('./allowUserSwapBattery');
 const receiveContractBinding = require('./receiveContractBinding');

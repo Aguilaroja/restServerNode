@@ -11,6 +11,22 @@ const rateLimit = require('express-rate-limit');
 const { log } = require('./logger'); //Serious logging using Winston instead of a simple console.log
 const fileUpload = require('express-fileupload');
 
+/**
+ * GraphQL Components
+ */
+const { ApolloServer } = require('apollo-server-express');
+const typeDefs = require('../../graphql/schema');
+const resolvers = require('../../graphql/resolvers');
+const UserAPI = require('../../graphql/dataSources/user');
+const ZynchAPI = require('../../graphql/dataSources/zynch');
+const dataSources = () => ({
+  userAPI: new UserAPI(),
+  zynchApi: new ZynchAPI()
+});
+
+/**
+ * Extra Middlewares
+ */
 const corsOptions = {
   optionSuccessStatus: 200,
   methods: ['GET', 'POST']
@@ -52,6 +68,9 @@ const init = () => {
       useTempFiles: true
     })
   );
+
+  const apolloServer = new ApolloServer({ typeDefs, resolvers, dataSources });
+  apolloServer.applyMiddleware({ app, path: '/api/graphql' });
   return app;
 };
 

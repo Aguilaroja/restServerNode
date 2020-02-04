@@ -7,80 +7,87 @@ const ZynchScooter = require('../../server/models/zynch_scooter');
 const ZynchPack = require('../../server/models/zynch_pack');
 const Usuario = require('../../server/models/usuario');
 
-const getQrCode = async(req, res) => {
+// Esta funcion es la entrada para la api REST
+const createQrCodeREST = async(req, res) => {
     // Verificar que la solicitud esté formada correctamente
-    const body = req.body ? req.body : null;
-    const vcu = body.vcu ? body.vcu : null;
+    const vcu = req.body.vcu ? req.body.vcu : null;
     const width = body.width ? body.width : 640;
-    let qrCodeObject = {};
-
     if (!vcu || !width) {
-        return res.json({
+        return {
             ok: false,
             err: { message: '400 - Bad Request' }
-        });
+        };
     } else {
-        //Encontrar el VCU, el usuario relacionado con este VCU, los swaps disponibles
-        const scooter = await ZynchScooter.findOne({ vcu: vcu });
-        if (!scooter) {
-            log.debug("VCU doesn't exist");
-            return res.json({
-                ok: false,
-                err: {
-                    message: "VCU doesn't exist."
-                }
-            });
-        } else {
-            qrCodeObject.user_email = scooter.email_user;
-        }
-        const pack = await ZynchPack.findOne({ email_user: qrCodeObject.user_email });
-        if (!pack) {
-            return res.json({
-                ok: false,
-                err: {
-                    message: 'NO PACKS FOUND'
-                }
-            });
-        } else if (pack) {
-            qrCodeObject.swapsAvailable = pack.available_swaps;
-        }
-        qrCodeObject.vcu = vcu;
-        const expirationTime = 15.1; // 15 minutos y 6s despues de que se genera la solicitud
-        qrCodeObject.dateGenerated = new Date();
-        qrCodeObject.expiryDate = new Date(
-            qrCodeObject.dateGenerated.getTime() + expirationTime * 60000 //el qr expira 15 minutos y 6 segundos despues de que se recibe la solicitud
-        );
-        await createQrCode(JSON.stringify(qrCodeObject), width, (err, url) => {
-            if (err) {
-                log.error(err);
-                return res.json({
-                    ok: false,
-                    err: {
-                        message: err
-                    }
-                });
-            } else {
-                qrCodeObject.base64Image = url;
-            }
-        });
-        const user = await Usuario.findOne({ email: qrCodeObject.user_email });
-        if (!user) {
-            return res.json({
-                ok: false,
-                err: {
-                    message: 'NO USER FOUND'
-                }
-            });
-        } else if (user) {
-            qrCodeObject.user_id = user.id;
-        }
-        newQrCodeEntry = new qrCodeModel(qrCodeObject);
-        newQrCodeEntry.save();
-        res.json({
-            ok: true,
-            image: qrCodeObject.base64Image
-        });
+        response = await createQrCode(vcu, width);
+        return res.json(response);
     }
+};
+
+// Esta funcion hace el trabajo real de generar el QR
+const createQrCode = async(vcu, width) => {
+    let qrCodeObject = {};
+
+    //Encontrar el VCU, el usuario relacionado con este VCU, los swaps disponibles
+    const moto = await ZynchMoto.findOne({ serie: vcu });
+    if (!moto) {
+        return {
+            ok: false,
+            err: {
+                message: "VCU doesn't exist."
+            }
+        };
+    } else {
+        qrCodeObject.user_email = moto.email_user;
+    }
+    const pack = await ZynchPack.findOne({ email_user: qrCodeObject.user_email });
+    if (!pack) {
+        return {
+            ok: false,
+            err: {
+                message: 'NO PACKS FOUND'
+            }
+        };
+    } else if (pack) {
+        qrCodeObject.swapsAvailable = pack.available_swaps;
+    }
+    qrCodeObject.vcu = vcu;
+    const expirationTime = 15.1; // 15 minutos y 6s despues de que se genera la solicitud
+    qrCodeObject.dateGenerated = new Date();
+    qrCodeObject.expiryDate = new Date(
+        qrCodeObject.dateGenerated.getTime() + expirationTime * 60000 //el qr expira 15 minutos y 6 segundos despues de que se recibe la solicitud
+    );
+    await createQrCodeUrl(JSON.stringify(qrCodeObject), width, (err, url) => {
+        if (err) {
+            log.error(err);
+            return {
+                ok: false,
+                err: {
+                    message: err
+                }
+            };
+        } else {
+            qrCodeObject.base64Image = url;
+        }
+    });
+    const user = await Usuario.findOne({ email: qrCodeObject.user_email });
+    if (!user) {
+        return {
+            ok: false,
+            err: {
+                message: 'NO USER FOUND'
+            }
+        };
+    } else if (user) {
+        qrCodeObject.user_id = user.id;
+    }
+    newQrCodeEntry = new qrCodeModel(qrCodeObject);
+    newQrCodeEntry.save();
+    ({
+        ok: true,
+        image: qrCodeObject.base64Image
+    });
+
+    return { ok: true, image: qrCodeObject.base64Image };
 };
 
 /**
@@ -90,7 +97,7 @@ const getQrCode = async(req, res) => {
  * @param width
  * @param cWidth
  */
-const createQrCode = async(dataForQrCode, width, callback) => {
+const createQrCodeUrl = async(dataForQrCode, width, callback) => {
     try {
         width = Number(width);
         const cWidth = width * 0.25;
@@ -120,4 +127,4 @@ const createQrCode = async(dataForQrCode, width, callback) => {
     }
 };
 
-module.exports = getQrCode;
+module.exports = { createQrCodeREST, createQrCode };
