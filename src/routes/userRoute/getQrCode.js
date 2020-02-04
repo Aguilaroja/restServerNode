@@ -37,7 +37,7 @@ const createQrCode = async (vcu, width) => {
       }
     };
   } else {
-    qrCodeObject.user_email = moto.email_user;
+    qrCodeObject.user_email = moto._doc.email_user;
   }
   const pack = await ZynchPack.findOne({ email_user: qrCodeObject.user_email });
   if (!pack) {
