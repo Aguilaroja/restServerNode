@@ -10,7 +10,8 @@ const Usuario = require('../../server/models/usuario');
 // Esta funcion es la entrada para la api REST
 const createQrCodeREST = async (req, res) => {
   // Verificar que la solicitud esté formada correctamente
-  const vcu = req.body.vcu ? req.body.vcu : null;
+  const body = req.body;
+  const vcu = body.vcu ? body.vcu : null;
   const width = body.width ? body.width : 640;
   if (!vcu || !width) {
     return {
@@ -25,10 +26,12 @@ const createQrCodeREST = async (req, res) => {
 
 // Esta funcion hace el trabajo real de generar el QR
 const createQrCode = async (vcu, width) => {
+  console.log({ vcu, width });
   let qrCodeObject = {};
 
   //Encontrar el VCU, el usuario relacionado con este VCU, los swaps disponibles
-  const moto = await ZynchMoto.findOne({ serie: vcu });
+  const moto = await ZynchScooter.findOne({ vcu });
+  console.log(await ZynchScooter.find({}));
   if (!moto) {
     return {
       ok: false,
@@ -37,7 +40,7 @@ const createQrCode = async (vcu, width) => {
       }
     };
   } else {
-    qrCodeObject.user_email = moto.email_user;
+    qrCodeObject.user_email = moto._doc.email_user;
   }
   const pack = await ZynchPack.findOne({ email_user: qrCodeObject.user_email });
   if (!pack) {
