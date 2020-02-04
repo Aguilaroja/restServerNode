@@ -4,50 +4,50 @@ const uniqueValidator = require('mongoose-unique-validator');
 let Schema = mongoose.Schema;
 
 let qrCodeSchema = new Schema({
-  user_id: {
-    type: String,
-    unique: false,
-    required: true
-  },
-  user_email: {
-    type: String,
-    unique: false,
-    required: true
-  },
-  vcu: {
-    type: String,
-    unique: false,
-    required: true
-  },
-  base64Image: {
-    type: String,
-    unique: false,
-    required: true
-  },
-  swapsAvailable: {
-    type: Number,
-    required: true,
-    default: 0
-  },
-  dateGenerated: {
-    type: Date,
-    default: null,
-    required: new Date()
-  },
-  expiryDate: {
-    type: Date,
-    default: null,
-    required: false
-  }
+    user_id: {
+        type: String,
+        unique: false,
+        required: true
+    },
+    id_user: {
+        type: String,
+        unique: false,
+        required: true
+    },
+    vcu: {
+        type: String,
+        unique: false,
+        required: true
+    },
+    base64Image: {
+        type: String,
+        unique: false,
+        required: true
+    },
+    swapsAvailable: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    dateGenerated: {
+        type: Date,
+        default: null,
+        required: new Date()
+    },
+    expiryDate: {
+        type: Date,
+        default: null,
+        required: false
+    }
 });
 
 //Mediante ésta método se modifica el objeto de respuesta del Schema
 qrCodeSchema.methods.toJSON = function() {
-  let qr = this;
-  let qrObject = user.toObject();
-  delete qrObject._id;
+    let qr = this;
+    let qrObject = user.toObject();
+    delete qrObject._id;
 
-  return qrObject;
+    return qrObject;
 };
 
 //Validaciones: Para éste plugin se necesita el paquete mongoose-unique-validator
