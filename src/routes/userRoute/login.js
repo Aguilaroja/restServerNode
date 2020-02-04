@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../../server/models/usuario'); //Ésto es un objeto para el Schema
 const TokenLogin = require('../../server/models/token_login'); //Ésto es un objeto para el Schema
-const ZynchMoto = require('../../server/models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchScooter = require('../../server/models/zynch_scooter'); //Ésto es un objeto para el Schema
 const ZynchPack = require('../../server/models/zynch_pack'); //Ésto es un objeto para el Schema
 const formatoFecha = require('../../server/functions/formatoFecha');
 const { config, log } = require('../../server/config');
@@ -75,7 +75,7 @@ login = (req, res) => {
                             });
                         }
 
-                        ZynchMoto.find({ id_user: usuarioDB.id, predetermined: true }, (err, zynchDB) => {
+                        ZynchScooter.find({ id_user: usuarioDB.id, predetermined: true }, (err, scooterDB) => {
                             if (err) {
                                 return res.status(500).json({
                                     ok: false,
@@ -83,7 +83,7 @@ login = (req, res) => {
                                 });
                             }
 
-                            if (!zynchDB) {
+                            if (!scooterDB) {
                                 return res.status(400).json({
                                     ok: false,
                                     err: {
@@ -92,9 +92,9 @@ login = (req, res) => {
                                 });
                             }
 
-                            let objetoZynch = zynchDB[0];
+                            let objetoScooter = scooterDB[0];
 
-                            ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
+                            ZynchPack.find({ vcu: objetoScooter.vcu }, (err, zynchPackDB) => {
                                 if (err) {
                                     return res.status(500).json({
                                         ok: false,
@@ -115,7 +115,7 @@ login = (req, res) => {
 
                                 let objetoZynchPack = zynchPackDB[0];
                                 var ob = JSON.parse(JSON.stringify(objetoZynchPack));
-                                ob.name_zynch = objetoZynch.name_zynch;
+                                ob.name_zynch = objetoScooter.name_zynch;
 
                                 res.json({
                                     ok: true,
@@ -132,7 +132,7 @@ login = (req, res) => {
                         });
                     });
                 } else {
-                    ZynchMoto.find({ id_user: usuarioDB.id, predetermined: true }, (err, zynchDB) => {
+                    ZynchScooter.find({ id_user: usuarioDB.id, predetermined: true }, (err, scooterDB) => {
                         if (err) {
                             return res.status(500).json({
                                 ok: false,
@@ -140,7 +140,7 @@ login = (req, res) => {
                             });
                         }
 
-                        if (!zynchDB) {
+                        if (!scooterDB) {
                             return res.status(400).json({
                                 ok: false,
                                 err: {
@@ -149,9 +149,9 @@ login = (req, res) => {
                             });
                         }
 
-                        let objetoZynch = zynchDB[0];
+                        let objetoScooter = scooterDB[0];
 
-                        ZynchPack.find({ serie: objetoZynch.serie }, (err, zynchPackDB) => {
+                        ZynchPack.find({ vcu: objetoScooter.vcu }, (err, zynchPackDB) => {
                             if (err) {
                                 return res.status(500).json({
                                     ok: false,
@@ -172,7 +172,7 @@ login = (req, res) => {
 
                             let objetoZynchPack = zynchPackDB[0];
                             var ob = JSON.parse(JSON.stringify(objetoZynchPack));
-                            ob.name_zynch = objetoZynch.name_zynch;
+                            ob.name_zynch = objetoScooter.name_zynch;
 
                             res.json({
                                 ok: true,

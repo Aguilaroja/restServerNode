@@ -18,7 +18,7 @@ let zynchPackSchema = new Schema({
         type: String,
         required: true
     },
-    serie: {
+    vcu: {
         type: String,
         required: true,
         unique: true

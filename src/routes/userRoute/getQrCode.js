@@ -3,7 +3,7 @@ const { createCanvas, loadImage } = require('canvas');
 const path = require('path');
 const { log } = require('../../server/config');
 const qrCodeModel = require('../../server/models/qr_code'); //Ésto es un objeto para el Schema
-const ZynchMoto = require('../../server/models/zynch_moto');
+const ZynchScooter = require('../../server/models/zynch_scooter');
 const ZynchPack = require('../../server/models/zynch_pack');
 const Usuario = require('../../server/models/usuario');
 
@@ -37,7 +37,7 @@ const createQrCode = async (vcu, width) => {
       }
     };
   } else {
-    qrCodeObject.user_email = moto._doc.email_user;
+    qrCodeObject.user_email = moto.email_user;
   }
   const pack = await ZynchPack.findOne({ email_user: qrCodeObject.user_email });
   if (!pack) {

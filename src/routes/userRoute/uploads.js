@@ -1,6 +1,6 @@
 const fileUpload = require('express-fileupload');
 const Usuario = require('../../server/models/usuario'); //Ésto es un objeto para el Schema
-const ZynchMoto = require('../../server/models/zynch_moto'); //Ésto es un objeto para el Schema
+const ZynchScooter = require('../../server/models/zynch_scooter'); //Ésto es un objeto para el Schema
 const log = require('../../server/config/services/logger');
 const fs = require('fs'); // file system
 const path = require('path');
@@ -109,7 +109,7 @@ function imagenUsuario(id, res, nombreArchivo) {
 
 function imagenScooter(id, res, nombreArchivo) {
 
-    ZynchMoto.findOne({ serie: id }, (err, zynchDB) => {
+    ZynchScooter.findOne({ vcu: id }, (err, scooterDB) => {
 
         if (err) {
             borraArchivo(nombreArchivo, 'scooters');
@@ -120,7 +120,7 @@ function imagenScooter(id, res, nombreArchivo) {
             });
         }
 
-        if (!zynchDB) {
+        if (!scooterDB) {
             borraArchivo(nombreArchivo, 'scooters');
 
             return res.status(400).json({
@@ -131,14 +131,14 @@ function imagenScooter(id, res, nombreArchivo) {
             });
         }
 
-        borraArchivo(zynchDB.img, 'scooters');
+        borraArchivo(scooterDB.img, 'scooters');
 
-        zynchDB.img = nombreArchivo;
+        scooterDB.img = nombreArchivo;
 
-        zynchDB.save((err, zynchGuardada) => {
+        scooterDB.save((err, scooterGuardada) => {
             res.json({
                 ok: true,
-                zynch: zynchGuardada,
+                zynch: scooterGuardada,
                 img: nombreArchivo
             });
         });
