@@ -23,15 +23,12 @@ const createQrCodeREST = async (req, res) => {
     return res.json(response);
   }
 };
-
 // Esta funcion hace el trabajo real de generar el QR
 const createQrCode = async (vcu, width) => {
-  console.log({ vcu, width });
   let qrCodeObject = {};
 
   //Encontrar el VCU, el usuario relacionado con este VCU, los swaps disponibles
   const moto = await ZynchScooter.findOne({ vcu });
-  console.log(await ZynchScooter.find({}));
   if (!moto) {
     return {
       ok: false,

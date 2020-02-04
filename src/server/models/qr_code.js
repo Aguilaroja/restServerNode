@@ -9,11 +9,6 @@ let qrCodeSchema = new Schema({
     unique: false,
     required: true
   },
-  user_email: {
-    type: String,
-    unique: false,
-    required: true
-  },
   vcu: {
     type: String,
     unique: false,
