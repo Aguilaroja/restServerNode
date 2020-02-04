@@ -3,7 +3,7 @@ const ZynchMoto = require('../../server/models/zynch_moto'); //Ésto es un objet
 zynchs = (req, res) => {
     let dato = req.query;
 
-    ZynchMoto.find({ email_user: dato.email }, (err, zynchDB) => {
+    ZynchMoto.find({ id_user: dato.id_user }, (err, zynchDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,

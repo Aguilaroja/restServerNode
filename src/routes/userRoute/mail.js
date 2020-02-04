@@ -37,7 +37,7 @@ mail = (req, res) => {
         // Genera el JWT
         let token = jwt.sign({
                 user: {
-                    id: usuarioDB.id_user,
+                    id: usuarioDB.id,
                     name: usuarioDB.nombre,
                     email: usuarioDB.email,
                     img: usuarioDB.img
