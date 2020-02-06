@@ -1,4 +1,4 @@
-const create = require('./create');
+const { create } = require('./create');
 const login = require('./login');
 const mail = require('./mail');
 const updatepass = require('./updatepass');
